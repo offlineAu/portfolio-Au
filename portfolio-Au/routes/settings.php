@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\PortfolioController as PortfolioSettingsController;
 use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Controllers\Teams\TeamController;
 use App\Http\Controllers\Teams\TeamInvitationController;
@@ -13,6 +14,20 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('settings/portfolio', [PortfolioSettingsController::class, 'edit'])->name('portfolio.edit');
+    Route::patch('settings/portfolio/profile', [PortfolioSettingsController::class, 'updateProfile'])->name('portfolio.profile.update');
+    Route::post('settings/portfolio/skills', [PortfolioSettingsController::class, 'storeSkill'])->name('portfolio.skills.store');
+    Route::patch('settings/portfolio/skills/{skill}', [PortfolioSettingsController::class, 'updateSkill'])->name('portfolio.skills.update');
+    Route::delete('settings/portfolio/skills/{skill}', [PortfolioSettingsController::class, 'destroySkill'])->name('portfolio.skills.destroy');
+    Route::post('settings/portfolio/projects', [PortfolioSettingsController::class, 'storeProject'])->name('portfolio.projects.store');
+    Route::patch('settings/portfolio/projects/{project}', [PortfolioSettingsController::class, 'updateProject'])->name('portfolio.projects.update');
+    Route::delete('settings/portfolio/projects/{project}', [PortfolioSettingsController::class, 'destroyProject'])->name('portfolio.projects.destroy');
+    Route::post('settings/portfolio/experiences', [PortfolioSettingsController::class, 'storeExperience'])->name('portfolio.experiences.store');
+    Route::patch('settings/portfolio/experiences/{experience}', [PortfolioSettingsController::class, 'updateExperience'])->name('portfolio.experiences.update');
+    Route::delete('settings/portfolio/experiences/{experience}', [PortfolioSettingsController::class, 'destroyExperience'])->name('portfolio.experiences.destroy');
+    Route::post('settings/portfolio/focus-items', [PortfolioSettingsController::class, 'storeFocusItem'])->name('portfolio.focus-items.store');
+    Route::patch('settings/portfolio/focus-items/{focusItem}', [PortfolioSettingsController::class, 'updateFocusItem'])->name('portfolio.focus-items.update');
+    Route::delete('settings/portfolio/focus-items/{focusItem}', [PortfolioSettingsController::class, 'destroyFocusItem'])->name('portfolio.focus-items.destroy');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
