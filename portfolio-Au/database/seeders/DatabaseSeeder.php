@@ -25,4 +25,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call(PortfolioSeeder::class);
     }
+
+    public function run(): void
+    {
+        $this->call([
+            RoleUserSeeder::class,
+        ]);
+    }
 }

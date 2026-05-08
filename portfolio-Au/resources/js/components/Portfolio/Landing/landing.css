@@ -1,0 +1,440 @@
+/* resources/js/components/Portfolio/Landing/landing.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ── Root ── */
+.lp-root {
+    min-height: 100vh;
+    background: #0a0a0a;
+    color: #f0ede6;
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Hero ── */   
+.lp-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 3rem;
+    overflow: hidden;
+}
+
+/* Grain texture overlay */
+.lp-hero-noise {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+}
+
+/* Radial glow */
+.lp-hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(255,210,120,0.07) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.lp-hero-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 1rem;
+    z-index: 10;
+}
+
+.lp-hero-available {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a0a09a;
+}
+
+.lp-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px #4ade80;
+    animation: lp-pulse 2s ease-in-out infinite;
+}
+
+@keyframes lp-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+/* ── Content placeholder ── */
+.lp-content-placeholder {
+    padding: 3rem;
+    color: #3a3a38;
+    font-size: 0.875rem;
+    text-align: center;
+    border-top: 1px solid #1a1a1a;
+}
+.lp-content-placeholder strong {
+    color: #c8a96e;
+}
+
+/* ── Backdrop ── */
+.lp-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 40;
+    animation: lp-backdrop-in 0.3s ease both;
+}
+
+@keyframes lp-backdrop-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ── Modal ── */
+.lp-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    pointer-events: none;
+}
+
+.lp-modal-inner {
+    pointer-events: all;
+    width: 100%;
+    max-width: 480px;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    animation: lp-modal-in 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes lp-modal-in {
+    from { opacity: 0; transform: scale(0.93) translateY(16px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.lp-modal-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.lp-modal-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #c8a96e;
+    margin: 0;
+}
+
+.lp-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #f0ede6;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.lp-modal-sub {
+    font-size: 0.825rem;
+    color: #5a5a58;
+    margin: 0.25rem 0 0;
+}
+
+/* ── Role cards ── */
+.lp-role-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.lp-role-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: #161616;
+    border: 1px solid #222;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    color: #f0ede6;
+    width: 100%;
+}
+
+.lp-role-card:hover:not(:disabled) {
+    border-color: #c8a96e;
+    background: #1a1a16;
+    transform: translateX(3px);
+}
+
+.lp-role-card--active {
+    border-color: #c8a96e;
+    background: #1a1a16;
+}
+
+.lp-role-card--loading {
+    opacity: 0.6;
+}
+
+.lp-role-emoji {
+    font-size: 1.4rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.lp-role-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1;
+}
+
+.lp-role-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #f0ede6;
+}
+
+.lp-role-desc {
+    font-size: 0.775rem;
+    color: #c8a96e;
+    font-weight: 400;
+}
+
+.lp-role-hint {
+    font-size: 0.725rem;
+    color: #4a4a48;
+    margin-top: 0.15rem;
+}
+
+.lp-role-arrow {
+    font-size: 1rem;
+    color: #3a3a38;
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.lp-role-card:hover .lp-role-arrow {
+    color: #c8a96e;
+    transform: translateX(3px);
+}
+
+/* ── Dismiss ── */
+.lp-modal-dismiss {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.775rem;
+    color: #3a3a38;
+    text-align: center;
+    padding: 0.5rem;
+    transition: color 0.2s;
+    letter-spacing: 0.03em;
+}
+
+.lp-modal-dismiss:hover {
+    color: #8a8880;
+}
+
+/* ── ── ── HERO LAYOUT GRID ── ── ── */
+
+/* Transforming the main body into a wrapper for side-by-side alignment */
+.lp-hero-body {
+    display: grid;
+    /* Split into two main columns for text/photo */
+    grid-template-cols: 1.2fr 0.8fr; 
+    align-items: center; /* Vertically aligns name and photo center */
+    gap: 3rem;
+    flex: 1; /* Takes up all vertical space for correct footer placement */
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    z-index: 5;
+    animation: lp-fade-up 0.8s ease both;
+}
+
+@keyframes lp-fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Left Column: Name & Tagline */
+.lp-hero-text-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.lp-hero-eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #c8a96e;
+    margin: 0;
+}
+
+.lp-hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 8rem); /* Slightly smaller than full-width full-width */
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.lp-hero-first { color: #f0ede6; }
+
+.lp-hero-last {
+    color: transparent;
+    -webkit-text-stroke: 1.5px #f0ede6;
+}
+
+.lp-hero-tagline {
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    font-weight: 300;
+    color: #8a8880;
+    max-width: 480px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── RIGHT COLUMN: PHOTO ── */
+.lp-hero-photo-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: lp-fade-up 1s 0.2s ease both;
+    
+    /* ── DIRECT BLENDING MODE (No BG removal needed) ── */
+    /* Assumes your photo has a dark/black background to blend into the main black page */
+    mix-blend-mode: screen; 
+}
+
+.lp-hero-portrait-img {
+    max-height: 70vh; /* Contain it vertically to match reference */
+    width: auto;
+    object-fit: cover;
+    filter: grayscale(10%);
+    transition: all 0.3s ease;
+}
+
+/* ── BUTTONS & FOOTER: Span Full Width ── */
+.lp-hero-actions-wrapper {
+    grid-column: 1 / -1; /* Critical: spans both columns of the grid */
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-start; /* Matches image_1.png alignment */
+}
+
+.lp-hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: lp-fade-up 0.8s 0.25s ease both;
+}
+
+.lp-btn {
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    padding: 0.75rem 1.75rem;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+}
+
+.lp-btn--primary {
+    background: #f0ede6;
+    color: #0a0a0a;
+}
+.lp-btn--primary:hover {
+    background: #fff;
+    transform: translateY(-1px);
+}
+
+.lp-btn--ghost {
+    background: transparent;
+    color: #8a8880;
+    border: 1px solid #2a2a2a;
+}
+.lp-btn--ghost:hover {
+    border-color: #555;
+    color: #f0ede6;
+}
+
+.lp-hero-footer {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.75rem;
+    color: #3a3a38;
+    letter-spacing: 0.05em;
+    padding-top: 1rem;
+    animation: lp-fade-up 0.8s 0.35s ease both;
+}
+
+.lp-sep { color: #2a2a2a; }
+
+
+/* ── RESPONSIVE STACKING ── */
+@media (max-width: 1100px) {
+    .lp-hero-body {
+        grid-template-cols: 1fr; /* Stack on smaller screens */
+        text-align: center;
+        gap: 3rem;
+        padding-top: 4rem; /* Add space for header */
+    }
+    
+    .lp-hero-text-content {
+        align-items: center;
+        order: 2; /* Text goes below photo on stack stack */
+    }
+    
+    .lp-hero-photo-container {
+        order: 1; /* Photo goes above text on stack stack */
+    }
+    
+    .lp-hero-portrait-img {
+        max-height: 50vh;
+    }
+    
+    .lp-hero-actions-wrapper {
+        justify-content: center; /* Center buttons on stack stack */
+    }
+}
+
+@media (max-width: 600px) {
+    .lp-hero { padding: 1.5rem; }
+    .lp-modal-inner { padding: 2rem 1.5rem; }
+    .lp-hero-name { font-size: clamp(3rem, 15vw, 4.5rem); }
+}

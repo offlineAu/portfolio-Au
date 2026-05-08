@@ -1,44 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
 use App\Models\Experience;
 use App\Models\FocusItem;
 use App\Models\Profile;
 use App\Models\Project;
 use App\Models\Skill;
-use Inertia\Inertia;
-use Inertia\Response;
 
-use Illuminate\HTTP\RedirectResponse;
-use Illuminate\HTTP\Request;
-use Illuminate\HTTP\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-
-class PortfolioController extends Controller
+class ProfileDataService
 {
-    /**
-     * Show the public portfolio page.
-     */
-    public function index(Request $request): Response
-    {
-        $profile = Profile::query()
-            ->with(['skills', 'projects', 'experiences', 'focusItems'])
-            ->firstOrFail();
-
-        return Inertia::render('PortfolioShowcase', [
-            'pageTitle' => $profile->page_title,
-            'profile' => $this->toPageProfile($profile),
-            'canEditMedia' => (bool) $request->session->get('portfolio_edit_unlocked', false),
-        ]);
-    }
-
     /**
      * Transform the profile model into the public page contract.
      *
      * @return array<string, mixed>
      */
-    private function toPageProfile(Profile $profile): array
+    public function toPageProfile(Profile $profile): array
     {
         return [
             'name' => $profile->name,
@@ -54,9 +31,11 @@ class PortfolioController extends Controller
             'websiteUrl' => $profile->website_url,
             'githubUrl' => $profile->github_url,
             'linkedinUrl' => $profile->linkedin_url,
+            'facebookUrl' => $profile->facebook_url,
             'resumeUrl' => $profile->resume_url,
-            'avatarUrl' => $profile->avatar_url,
-            'coverPhotoUrl' => $profile->cover_photo_url,
+            'githubAvatarUrl' => $profile->github_avatar_url,
+            'facebookAvatarUrl' => $profile->facebook_avatar_url,
+            'facebookCoverPhotoUrl' => $profile->facebook_cover_photo_url,
             'techStack' => $profile->skills
                 ->map(fn (Skill $skill) => $skill->name)
                 ->all(),
@@ -91,7 +70,7 @@ class PortfolioController extends Controller
      *
      * @return array<int, string>
      */
-    private function toDetailLines(mixed $details): array
+    public function toDetailLines(mixed $details): array
     {
         if (is_array($details)) {
             return array_values(array_filter($details, fn (mixed $line) => is_string($line) && $line !== ''));
@@ -106,28 +85,4 @@ class PortfolioController extends Controller
 
         return $cleanLines !== [] ? $cleanLines : [trim($details)];
     }
-
-    public function unlock(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'edit_key' => ['required', 'string'],
-        ]);
-
-        // TODO: Validate edit key against database or environment
-        abort_if(! hash_equals((string) env('PORTFOLIO_EDIT_KEY'), $validated['edit_key']), 403, 'Invalid edit key');
-
-        $request->session()->put('portfolio_edit_unlocked', true);
-        
-        return redirect()->back();
-    }
-
-        public function lock(Request $request): RedirectResponse
-    {
-
-        $request->session()->forget('portfolio_edit_unlocked');
-        
-        return redirect()->back();
-    }
-
-    //Continue Add Upload Methods
 }

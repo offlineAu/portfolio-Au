@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'website_url',
     'github_url',
     'linkedin_url',
+    'facebook_url',
     'resume_url',
     'avatar_url',
     'cover_photo_url',

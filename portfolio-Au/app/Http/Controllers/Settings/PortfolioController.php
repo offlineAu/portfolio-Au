@@ -8,9 +8,9 @@ use App\Models\FocusItem;
 use App\Models\Profile;
 use App\Models\Project;
 use App\Models\Skill;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -40,6 +40,7 @@ class PortfolioController extends Controller
                 'websiteUrl' => $profile->website_url,
                 'githubUrl' => $profile->github_url,
                 'linkedinUrl' => $profile->linkedin_url,
+                'facebookUrl' => $profile->facebook_url,
                 'resumeUrl' => $profile->resume_url,
                 'avatarUrl' => $profile->avatar_url,
                 'coverPhotoUrl' => $profile->cover_photo_url,
@@ -99,6 +100,7 @@ class PortfolioController extends Controller
             'website_url' => ['nullable', 'url', 'max:255'],
             'github_url' => ['nullable', 'url', 'max:255'],
             'linkedin_url' => ['nullable', 'url', 'max:255'],
+            'facebook_url' => ['nullable', 'url', 'max:255'],
             'resume_url' => ['nullable', 'url', 'max:255'],
             'avatar_file' => ['nullable', 'image', 'max:5120'],
             'cover_photo_file' => ['nullable', 'image', 'max:8192'],
@@ -141,6 +143,7 @@ class PortfolioController extends Controller
             'website_url' => $validated['website_url'] ?? null,
             'github_url' => $validated['github_url'] ?? null,
             'linkedin_url' => $validated['linkedin_url'] ?? null,
+            'facebook_url' => $validated['facebook_url'] ?? null,
             'resume_url' => $validated['resume_url'] ?? null,
             'avatar_url' => $avatarUrl,
             'cover_photo_url' => $coverPhotoUrl,

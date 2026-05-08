@@ -12,7 +12,7 @@ export function UserInfo({
     team?: Team | null;
 }) {
     const getInitials = useInitials();
-    const showAvatar = Boolean(user.avatar && user.avatar !== '');
+    const showAvatar = Boolean(user?.avatar && user?.avatar !== '');
 
     return (
         <>

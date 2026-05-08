@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('profiles', function (Blueprint $table) {
-            $table->string('github_avatar_url')->nullable()->after('resume_url');
-            $table->string('facebook_avatar_url')->nullable()->after('github_avatar_url');
-            $table->string('facebook_cover_photo_url')->nullable()->after('facebook_avatar_url');
+            $table->string('facebook_url')->nullable()->after('linkedin_url');
         });
     }
 
@@ -24,11 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('profiles', function (Blueprint $table) {
-            $table->dropColumn([
-                'github_avatar_url',
-                'facebook_avatar_url',
-                'facebook_cover_photo_url',
-            ]);
+            $table->dropColumn('facebook_url');
         });
     }
 };

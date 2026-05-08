@@ -27,6 +27,7 @@ type PortfolioProfile = {
     websiteUrl: string | null;
     githubUrl: string | null;
     linkedinUrl: string | null;
+    facebookUrl: string | null;
     resumeUrl: string | null;
     avatarUrl: string | null;
     coverPhotoUrl: string | null;
@@ -356,6 +357,21 @@ export default function Portfolio({
                                             />
                                             <InputError
                                                 message={errors.linkedin_url}
+                                            />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="facebook_url">
+                                                Facebook URL
+                                            </Label>
+                                            <Input
+                                                id="facebook_url"
+                                                name="facebook_url"
+                                                defaultValue={
+                                                    profile.facebookUrl ?? ''
+                                                }
+                                            />
+                                            <InputError
+                                                message={errors.facebook_url}
                                             />
                                         </div>
                                         <div className="grid gap-2">
