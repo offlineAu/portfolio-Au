@@ -9,7 +9,7 @@ The interface shifts perspective — not just color.
 ## Mode Tokens
 
 ### UI Layer (Frontend Mode)
-```css--bg:        #F8FAFC   /* page background /
+```css--bg:  #F8FAFC   /* page background /
 --bg2:       #FFFFFF   / card surface /
 --bg3:       #F1F5F9   / subtle fill /
 --txt:       #0F172A   / primary text /
