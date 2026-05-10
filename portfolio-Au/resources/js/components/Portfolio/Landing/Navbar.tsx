@@ -4,7 +4,6 @@ const links = [
     { label: 'About',   href: '#s-about' },
     { label: 'Skills',  href: '#s-skills' },
     { label: 'Work',    href: '#s-portfolio' },
-    { label: 'Contact', href: '#s-contact' },
 ];
 
 const sectionIds = ['s-about', 's-skills', 's-portfolio', 's-contact'];
@@ -64,7 +63,7 @@ export function Navbar() {
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                         aria-label="Back to top"
                     >
-                        AJJ<span>.</span>
+                        Au<span>.</span>
                     </button>
 
                     {links.map((l) => {
