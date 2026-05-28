@@ -16,7 +16,14 @@ class PortfolioLandingController extends Controller
     public function index(): Response
     {
         return Inertia::render('Portfolio/Landing', [
-            //
+            'isLanding' => true,
+        ]);
+    }
+
+    public function portfolio(): Response
+    {
+        return Inertia::render('Portfolio/Landing', [
+            'isLanding' => false,
         ]);
     }
 }

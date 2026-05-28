@@ -17,4 +17,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('invitations/{invitation}/accept', [TeamInvitationController::class, 'accept'])->name('invitations.accept');
 });
 
+Route::get('/portfolio', [PortfolioLandingController::class, 'portfolio'])->name('portfolio.full');
+
 require __DIR__.'/settings.php';

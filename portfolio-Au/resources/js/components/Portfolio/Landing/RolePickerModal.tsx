@@ -10,7 +10,24 @@ interface RoleOption {
     hint: string;
 }
 
-const roles: RoleOption[] = [
+const LANDING_ROLES: RoleOption[] = [
+    {
+        id: 'recruiter',
+        label: "I'm Recruiting",
+        emoji: '🔍',
+        description: 'Show me experience and availability',
+        hint: 'Resume, timeline, tech depth, and contact.',
+    },
+    {
+        id: 'developer',
+        label: 'Fellow Developer',
+        emoji: '⚙️',
+        description: 'Show me the system',
+        hint: 'Architecture, APIs, security layer, and code.',
+    },
+];
+
+const PORTFOLIO_ROLES: RoleOption[] = [
     {
         id: 'guest',
         label: 'Just Browsing',
@@ -38,13 +55,16 @@ interface Props {
     open: boolean;
     current: Role;
     onClose: () => void;
+    isLanding?: boolean;
 }
 
-export function RolePickerModal({ open, current, onClose }: Props) {
+export function RolePickerModal({ open, current, onClose, isLanding = false }: Props) {
     const [loading, setLoading] = useState<Role | null>(null);
+    const roles = isLanding ? LANDING_ROLES : PORTFOLIO_ROLES;
 
     function selectRole(role: Role) {
-        if (role === current) {
+        // On full portfolio, same role just closes
+        if (!isLanding && role === current) {
             onClose();
             return;
         }
@@ -53,12 +73,16 @@ export function RolePickerModal({ open, current, onClose }: Props) {
 
         router.post(
             '/role',
-            { role },
             {
-                preserveScroll: true,
+                role,
+                redirect_to: isLanding ? 'portfolio' : 'back',
+            },
+            {
+                preserveScroll: !isLanding,
                 onFinish: () => {
                     setLoading(null);
-                    onClose();
+                    if (!isLanding) onClose();
+                    // On landing, Inertia follows the redirect to /portfolio
                 },
             },
         );
@@ -68,24 +92,20 @@ export function RolePickerModal({ open, current, onClose }: Props) {
 
     return (
         <>
-            {/* Backdrop */}
-            <div
-                className="lp-backdrop"
-                onClick={onClose}
-                aria-hidden="true"
-            />
+            <div className="lp-backdrop" onClick={onClose} aria-hidden="true" />
 
-            {/* Modal */}
             <div className="lp-modal" role="dialog" aria-modal="true" aria-labelledby="picker-title">
                 <div className="lp-modal-inner">
 
                     <div className="lp-modal-header">
                         <p className="lp-modal-eyebrow">Perspective</p>
                         <h2 className="lp-modal-title" id="picker-title">
-                            How are you visiting?
+                            {isLanding ? 'Who are you?' : 'Change perspective'}
                         </h2>
                         <p className="lp-modal-sub">
-                            Your choice shapes what you see.
+                            {isLanding
+                                ? 'Opens the full portfolio tailored to you.'
+                                : 'Your choice shapes what you see.'}
                         </p>
                     </div>
 
@@ -112,12 +132,19 @@ export function RolePickerModal({ open, current, onClose }: Props) {
                         ))}
                     </div>
 
-                    <button
-                        className="lp-modal-dismiss"
-                        onClick={onClose}
-                    >
-                        continue without choosing
-                    </button>
+                    {/* Landing: no dismiss — they must pick to proceed */}
+                    {!isLanding && (
+                        <button className="lp-modal-dismiss" onClick={onClose}>
+                            continue without choosing
+                        </button>
+                    )}
+
+                    {/* Landing: subtle escape hatch */}
+                    {isLanding && (
+                        <button className="lp-modal-dismiss" onClick={onClose}>
+                            just let me look around
+                        </button>
+                    )}
 
                 </div>
             </div>
