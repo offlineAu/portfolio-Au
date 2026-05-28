@@ -12,15 +12,17 @@ WORKDIR /app
 
 COPY . .
 
-# Install PHP dependencies
+# Install backend deps
 RUN composer install --no-dev --optimize-autoloader
 
-# Install frontend dependencies and build assets
+# Install frontend deps + build
 RUN npm install
 RUN npm run build
 
-# Render uses port 10000
+# Render port
+ENV PORT=10000
+
 EXPOSE 10000
 
-# Start Laravel server
-CMD php artisan serve --host=0.0.0.0 --port=10000
+# IMPORTANT: bind to Render port properly
+CMD php artisan serve --host=0.0.0.0 --port=${PORT}
