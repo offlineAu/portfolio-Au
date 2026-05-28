@@ -36,7 +36,10 @@
         }
     ],
     "env": {
-        "APP_NAME": "Laravel Vercel",
+        "APP_NAME": "Au",
+        "APP_KEY": "base64:HUD22VuFKNhODFusS6F74yukBHOY0j886OPKzSvmN30=",
+        "APP_URL": "https://portfolio-au.vercel.app",
+        "APP_ENV": "production",
         "APP_DEBUG": "false",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
