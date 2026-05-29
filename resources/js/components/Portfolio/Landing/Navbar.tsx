@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { router } from '@inertiajs/react';
+import { HireMeModal } from '@/components/Portfolio/Landing/HireMeModal';
 
 const links = [
     { label: 'About',  href: '#s-about' },
@@ -18,6 +19,7 @@ export function Navbar({ isLanding = false, onOpenPicker }: NavbarProps) {
     const [active, setActive]   = useState('s-about');
     const [scrolled, setScrolled] = useState(false);
     const [hidden, setHidden]   = useState(false);
+    const [hireMeOpen, setHireMeOpen] = useState(false);
     const lastY = useRef(0);
 
     useEffect(() => {
@@ -56,20 +58,7 @@ export function Navbar({ isLanding = false, onOpenPicker }: NavbarProps) {
         el?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const handleHireMe = () => {
-        if (isLanding) {
-            // On landing, Hire Me scrolls to the contact block in the hero
-            // or opens mailto directly — adjust to your preference
-            const el = document.querySelector('#s-contact');
-            if (el) {
-                el.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                window.location.href = 'mailto:your@email.com';
-            }
-        } else {
-            scrollTo('#s-contact');
-        }
-    };
+    const handleHireMe = () => setHireMeOpen(true);
 
     return (
         <>
@@ -154,6 +143,7 @@ export function Navbar({ isLanding = false, onOpenPicker }: NavbarProps) {
                     </div>
                 </nav>
             )}
+            <HireMeModal open={hireMeOpen} onClose={() => setHireMeOpen(false)} />
         </>
     );
 }

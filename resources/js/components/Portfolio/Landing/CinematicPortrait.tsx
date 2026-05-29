@@ -670,6 +670,14 @@ function RoboticFrame({ hovered }: { hovered: boolean }) {
 export function CinematicPortrait({ onLocked }: { onLocked?: () => void }) {
     const sceneRef = useRef<HTMLDivElement>(null);
 
+    // At the top of CinematicPortrait component, add:
+    const [particles] = useState<Array<{x: string; y: string}>>(() =>
+        Array.from({ length: 12 }, () => ({
+            x: `${10 + Math.random() * 80}%`,
+            y: `${10 + Math.random() * 80}%`,
+        }))
+    );
+
     const [stage,          setStage]          = useState<Stage>(0);
     const [isHovered,      setIsHovered]      = useState(false);
     const [orbitPositions, setOrbitPositions] = useState<Array<{x:number;y:number}>>([]);
@@ -837,11 +845,11 @@ export function CinematicPortrait({ onLocked }: { onLocked?: () => void }) {
                             <span className="cp-back-hint__text">Click to reveal</span>
                             <span className="cp-back-hint__icon">✦</span>
                         </div>
-                        {Array.from({length: 12}).map((_, i) => (
+                        {particles.map((p, i) => (
                             <div key={i} className="cp-back-particle" style={{
                                 '--p-i': i,
-                                '--p-x': `${10 + Math.random() * 80}%`,
-                                '--p-y': `${10 + Math.random() * 80}%`,
+                                '--p-x': p.x,
+                                '--p-y': p.y,
                             } as React.CSSProperties} />
                         ))}
                     </div>
@@ -857,11 +865,54 @@ export function CinematicPortrait({ onLocked }: { onLocked?: () => void }) {
                             <div className={`cp-lightshaft${isHovered ? ' cp-lightshaft--visible' : ''}`} />
                             <div className="cp-grain" />
                         </div>
+
+                        {/* ── DECORATIVE GRID OVERLAY ── */}
+                        <div className="cp-front-grid" aria-hidden />
+
+                        {/* ── TOP CLASSIFICATION BADGE ── */}
+                        <div className="cp-front-badge">
+                            <span className="cp-front-badge__line" />
+                            <span className="cp-front-badge__text">PROFILE // CLASS-A</span>
+                            <span className="cp-front-badge__line" />
+                        </div>
+
+                        {/* ── SIDE RULER MARKS ── */}
+                        <div className="cp-front-ruler cp-front-ruler--left" aria-hidden>
+                            {Array.from({ length: 8 }).map((_, i) => (
+                                <div key={i} className="cp-front-ruler__tick" style={{ '--tick-i': i } as React.CSSProperties} />
+                            ))}
+                        </div>
+                        <div className="cp-front-ruler cp-front-ruler--right" aria-hidden>
+                            {Array.from({ length: 8 }).map((_, i) => (
+                                <div key={i} className="cp-front-ruler__tick" style={{ '--tick-i': i } as React.CSSProperties} />
+                            ))}
+                        </div>
+
+                        {/* ── BOTTOM NAME PLATE ── */}
+                        <div className={`cp-nameplate${isHovered ? ' cp-nameplate--visible' : ''}`}>
+                            <div className="cp-nameplate__inner">
+                                <div className="cp-nameplate__top-line" />
+                                <div className="cp-nameplate__row">
+                                    <span className="cp-nameplate__icon">◈</span>
+                                    <span className="cp-nameplate__name">Airl Joriz</span>
+                                    <span className="cp-nameplate__icon">◈</span>
+                                </div>
+                                <div className="cp-nameplate__sub">WEB DEVELOPER · AI ENTHUSIAST</div>
+                                <div className="cp-nameplate__bottom-line" />
+                            </div>
+                        </div>
+
+                        {/* ── DIAGONAL ACCENT LINES ── */}
+                        <svg className="cp-front-diag" viewBox="0 0 300 600" preserveAspectRatio="none" aria-hidden>
+                            <line x1="0" y1="0" x2="30" y2="600" className="cp-diag-line cp-diag-line--1" />
+                            <line x1="270" y1="0" x2="300" y2="600" className="cp-diag-line cp-diag-line--2" />
+                            <line x1="10" y1="0" x2="22" y2="600" className="cp-diag-line cp-diag-line--3" />
+                        </svg>
+
                         <RoboticFrame hovered={isHovered} />
-                        {/* Burn canvas — mounts before flip completes, starts fully black */}
                         <BurnCanvas
                             active={burning}
-                            idle={showFront && !burning && !burnComplete}  // ← NEW PROP: paint black but don't animate
+                            idle={showFront && !burning && !burnComplete}
                             reverse={burnReverse}
                             onDone={handleBurnDone}
                         />
