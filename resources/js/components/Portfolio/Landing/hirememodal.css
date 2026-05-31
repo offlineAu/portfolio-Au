@@ -20,8 +20,12 @@
 }
 
 @keyframes hm-backdrop-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* ── MODAL SHELL ── */
@@ -37,7 +41,7 @@
     opacity: 0;
     transform: translateY(24px) scale(0.96);
     transition:
-        opacity   0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow:
         0 48px 96px rgba(0, 0, 0, 0.75),
@@ -60,23 +64,40 @@
     z-index: 10;
     pointer-events: none;
 }
-.hm-corner--tl { top: -1px;    left: -1px;   border-width: 1.5px 0 0 1.5px; }
-.hm-corner--tr { top: -1px;    right: -1px;  border-width: 1.5px 1.5px 0 0; }
-.hm-corner--bl { bottom: -1px; left: -1px;   border-width: 0 0 1.5px 1.5px; }
-.hm-corner--br { bottom: -1px; right: -1px;  border-width: 0 1.5px 1.5px 0; }
+.hm-corner--tl {
+    top: -1px;
+    left: -1px;
+    border-width: 1.5px 0 0 1.5px;
+}
+.hm-corner--tr {
+    top: -1px;
+    right: -1px;
+    border-width: 1.5px 1.5px 0 0;
+}
+.hm-corner--bl {
+    bottom: -1px;
+    left: -1px;
+    border-width: 0 0 1.5px 1.5px;
+}
+.hm-corner--br {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 1.5px 1.5px 0;
+}
 
 /* ── SCAN LINE ── */
 .hm-scan-line {
     position: absolute;
-    left: 0; right: 0;
+    left: 0;
+    right: 0;
     height: 1.5px;
     top: 0;
     background: linear-gradient(
         90deg,
         transparent 0%,
-        rgba(200, 169, 110, 0.0) 10%,
+        rgba(200, 169, 110, 0) 10%,
         rgba(200, 169, 110, 0.5) 50%,
-        rgba(200, 169, 110, 0.0) 90%,
+        rgba(200, 169, 110, 0) 90%,
         transparent 100%
     );
     z-index: 5;
@@ -85,10 +106,20 @@
 }
 
 @keyframes hm-scan-sweep {
-    0%   { top: 0;    opacity: 0; }
-    5%   { opacity: 1; }
-    95%  { opacity: 0.5; }
-    100% { top: 100%; opacity: 0; }
+    0% {
+        top: 0;
+        opacity: 0;
+    }
+    5% {
+        opacity: 1;
+    }
+    95% {
+        opacity: 0.5;
+    }
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
 }
 
 /* ── HEADER ── */
@@ -116,8 +147,15 @@
 }
 
 @keyframes hm-dot-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.55; transform: scale(0.78); }
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.55;
+        transform: scale(0.78);
+    }
 }
 
 .hm-header__badge {
@@ -140,7 +178,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
     flex-shrink: 0;
 }
 
@@ -157,9 +197,15 @@
     display: block;
     transition: background 0.2s;
 }
-.hm-close:hover span { background: rgba(200, 169, 110, 1); }
-.hm-close span:first-child { transform: rotate(45deg); }
-.hm-close span:last-child  { transform: rotate(-45deg); }
+.hm-close:hover span {
+    background: rgba(200, 169, 110, 1);
+}
+.hm-close span:first-child {
+    transform: rotate(45deg);
+}
+.hm-close span:last-child {
+    transform: rotate(-45deg);
+}
 
 /* ── BODY LAYOUT ── */
 .hm-body {
@@ -233,7 +279,9 @@
     border-radius: 2px;
     text-decoration: none;
     background: rgba(200, 169, 110, 0.02);
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
     cursor: pointer;
 }
 
@@ -253,7 +301,9 @@ a.hm-contact-item:hover {
     font-size: 11px;
     color: rgba(200, 169, 110, 0.65);
     flex-shrink: 0;
-    transition: border-color 0.2s, color 0.2s;
+    transition:
+        border-color 0.2s,
+        color 0.2s;
 }
 
 a.hm-contact-item:hover .hm-contact-item__icon {
@@ -295,7 +345,9 @@ a.hm-contact-item:hover .hm-contact-item__value {
     font-size: 0.9rem;
     color: rgba(200, 169, 110, 0.3);
     flex-shrink: 0;
-    transition: color 0.2s, transform 0.2s;
+    transition:
+        color 0.2s,
+        transform 0.2s;
 }
 
 a.hm-contact-item:hover .hm-contact-item__arrow {
@@ -370,7 +422,10 @@ a.hm-contact-item:hover .hm-contact-item__arrow {
     color: #f0ede6;
     outline: none;
     width: 100%;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
     resize: none;
     box-sizing: border-box;
 }
@@ -490,7 +545,9 @@ a.hm-contact-item:hover .hm-contact-item__arrow {
 }
 
 @keyframes hm-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* ── SUCCESS STATE ── */
@@ -507,8 +564,14 @@ a.hm-contact-item:hover .hm-contact-item__arrow {
 }
 
 @keyframes hm-success-in {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .hm-success__ring {
@@ -524,8 +587,14 @@ a.hm-contact-item:hover .hm-contact-item__arrow {
 }
 
 @keyframes hm-ring-expand {
-    from { transform: scale(0.6); opacity: 0; }
-    to   { transform: scale(1);   opacity: 1; }
+    from {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .hm-success__icon {
@@ -535,8 +604,14 @@ a.hm-contact-item:hover .hm-contact-item__arrow {
 }
 
 @keyframes hm-icon-glow {
-    0%, 100% { opacity: 0.7; }
-    50%       { opacity: 1; text-shadow: 0 0 12px rgba(200, 169, 110, 0.6); }
+    0%,
+    100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 12px rgba(200, 169, 110, 0.6);
+    }
 }
 
 .hm-success__title {
@@ -586,7 +661,87 @@ a.hm-contact-item:hover .hm-contact-item__arrow {
 }
 
 @media (max-width: 400px) {
-    .hm-backdrop { padding: 0; }
-    .hm-modal { border-radius: 0; max-height: 100vh; }
-    .hm-body { max-height: calc(100vh - 60px); }
+    .hm-backdrop {
+        padding: 0;
+    }
+    .hm-modal {
+        border-radius: 0;
+        max-height: 100vh;
+    }
+    .hm-body {
+        max-height: calc(100vh - 60px);
+    }
+}
+
+/* Mobile viewport safety for the hire dialog. */
+@media (max-width: 680px) {
+    .hm-backdrop {
+        align-items: flex-start;
+        overflow-y: auto;
+        padding: calc(0.75rem + env(safe-area-inset-top))
+            clamp(0.75rem, 4vw, 1rem)
+            calc(0.75rem + env(safe-area-inset-bottom));
+    }
+
+    .hm-modal {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .hm-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: rgba(13, 11, 16, 0.96);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+    }
+
+    .hm-body {
+        max-height: none;
+        min-height: 0;
+        overflow: visible;
+    }
+
+    .hm-info,
+    .hm-form {
+        padding: clamp(1.35rem, 6vw, 1.75rem) clamp(1rem, 5vw, 1.5rem);
+    }
+
+    .hm-contact-item {
+        align-items: flex-start;
+    }
+
+    .hm-contact-item__value {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .hm-input {
+        min-height: 44px;
+        font-size: 1rem;
+    }
+
+    .hm-btn {
+        min-height: 46px;
+    }
+}
+
+@media (max-width: 400px) {
+    .hm-backdrop {
+        padding: 0;
+    }
+
+    .hm-modal {
+        min-height: 100svh;
+        max-height: none;
+        border-right: none;
+        border-left: none;
+        border-radius: 0;
+    }
+
+    .hm-body {
+        max-height: none;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
 }
