@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { CinematicPortrait, FloatingStats } from '@/components/Portfolio/Landing/CinematicPortrait';
+import { SentimentGauge }   from '@/components/Portfolio/Landing/SentimentGauge';
+import { AvailabilityPing } from '@/components/Portfolio/Landing/AvailabilityPing';
 
 const TECH_STACK = [
     { name: 'Laravel',  logo: 'https://cdn.simpleicons.org/laravel/FF2D20' },
@@ -83,7 +85,19 @@ export function Hero({ onOpenPicker, scrollY, isLanding = false }: HeroProps) {
     const ghostBtn   = useMagnetic();
 
     const [isPortraitDeepHovered, setIsPortraitDeepHovered] = useState(false);
+    const [portraitExpandRequest, setPortraitExpandRequest] = useState(0);
     const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const handleViewWork = useCallback(() => {
+        if (isLanding) {
+            setPortraitExpandRequest(request => request + 1);
+            return;
+        }
+
+        document
+            .querySelector('#s-portfolio')
+            ?.scrollIntoView({ behavior: 'smooth' });
+    }, [isLanding]);
 
     const handlePortraitEnter = useCallback(() => {
         hoverTimerRef.current = setTimeout(() => setIsPortraitDeepHovered(true), 2000);
@@ -131,13 +145,14 @@ export function Hero({ onOpenPicker, scrollY, isLanding = false }: HeroProps) {
                             <TypewriterTagline />
                         </div>
 
+
                         <div className="lp-hero-actions">
                             {isLanding ? (
                                 <>
                                     <button
                                         className="lp-btn lp-btn--primary"
                                         {...primaryBtn}
-                                        onClick={onOpenPicker}
+                                        onClick={handleViewWork}
                                     >
                                         View my work
                                     </button>
@@ -154,11 +169,7 @@ export function Hero({ onOpenPicker, scrollY, isLanding = false }: HeroProps) {
                                     <button
                                         className="lp-btn lp-btn--primary"
                                         {...primaryBtn}
-                                        onClick={() =>
-                                            document
-                                                .querySelector('#s-portfolio')
-                                                ?.scrollIntoView({ behavior: 'smooth' })
-                                        }
+                                        onClick={handleViewWork}
                                     >
                                         View my work
                                     </button>
@@ -190,18 +201,16 @@ export function Hero({ onOpenPicker, scrollY, isLanding = false }: HeroProps) {
                     onMouseEnter={handlePortraitEnter}
                     onMouseLeave={handlePortraitLeave}
                 >
-                    <CinematicPortrait />
+                    <CinematicPortrait expandRequest={portraitExpandRequest} />
                 </div>
 
                 {/* ── RIGHT: HOLOGRAPHIC STATS ── */}
                 <div className="lp-hero-right">
-                    <div className="lp-avail-badge">
-                        <span className="lp-dot" />
-                        <span>Available for work</span>
-                    </div>
+                    <AvailabilityPing />
                     <div className="lp-hero-right-inner">
                         <FloatingStats isPortraitHovered={isPortraitDeepHovered} />
                     </div>
+                    <SentimentGauge />
                 </div>
             </div>
         </section>

@@ -26,4 +26,9 @@ class PortfolioLandingController extends Controller
             'isLanding' => false,
         ]);
     }
+
+    public function recruiter(): Response
+    {
+        return Inertia::render('Portfolio/Recruiter');
+    }
 }

@@ -41,4 +41,5 @@ Route::prefix('api/portfolio')
     ->group(function () {
         Route::get('/projects', 'projects')->name('api.portfolio.projects');
         Route::get('/metrics', 'metrics')->name('api.portfolio.metrics');
+        Route::post('/sentiment', 'sentiment')->name('api.portfolio.sentiment');
     });

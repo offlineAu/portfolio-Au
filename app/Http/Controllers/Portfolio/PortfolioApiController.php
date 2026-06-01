@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Portfolio;
 
 use App\Http\Controllers\Controller;
+use App\Services\GroqService;
 use App\Models\Profile;
 use App\Models\Project;
 use Illuminate\Http\JsonResponse;
@@ -48,5 +49,43 @@ class PortfolioApiController extends Controller
         return Profile::query()
             ->with(['skills', 'projects', 'experiences', 'focusItems'])
             ->firstOrFail();
+    }
+
+    public function sentiment(Request $request, GroqService $groq): JsonResponse
+    {
+        $request->validate([
+            'text' => 'required|string|max:500',
+        ]);
+
+        $prompt = "Analyze the sentiment of this text: \"{$request->text}\"\n\n"
+                . "Respond with ONLY valid JSON, no markdown, no explanation:\n"
+                . "{\n"
+                . "  \"score\": <float between -1 and 1>,\n"
+                . "  \"label\": \"<Negative|Neutral|Positive>\",\n"
+                . "  \"confidence\": <integer 0-100>,\n"
+                . "  \"word\": \"<single most emotionally charged word, or empty string>\"\n"
+                . "}";
+
+        $response = $groq->chat([
+            ['role' => 'system', 'content' => 'You are a sentiment analysis engine. Always respond with valid JSON only. No prose, no markdown.'],
+            ['role' => 'user',   'content' => $prompt],
+        ]);
+
+        if (!$response->successful()) {
+            return response()->json(['error' => 'Analysis failed'], 502);
+        }
+
+        // Groq returns OpenAI-compatible structure:
+        // $response->json('choices.0.message.content')
+        $raw   = $response->json('choices.0.message.content') ?? '';
+        $clean = trim(preg_replace('/```json|```/', '', $raw));
+
+        $parsed = json_decode($clean, true);
+
+        if (!$parsed) {
+            return response()->json(['error' => 'Parse failed'], 500);
+        }
+
+        return response()->json($parsed);
     }
 }

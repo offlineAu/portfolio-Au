@@ -10,6 +10,7 @@ interface RoleOption {
     hint: string;
 }
 
+// In RolePickerModal.tsx, change the LANDING_ROLES array:
 const LANDING_ROLES: RoleOption[] = [
     {
         id: 'recruiter',

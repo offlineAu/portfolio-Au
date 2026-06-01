@@ -79,10 +79,6 @@
     animation: cp-card-flip 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
-.cp-flipper--flipping {
-    animation: cp-card-flip 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-}
-
 @keyframes cp-card-flip {
     0% {
         transform: perspective(1200px) rotateY(0deg) scale(1);
@@ -120,8 +116,8 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center;
+    object-fit: contain;
+    object-position: center center;
     display: block;
     border-radius: 3px;
 }
@@ -129,7 +125,7 @@
 /* Pulsing edge glow — signals interactivity to visitors */
 .cp-back-pulse-ring {
     position: absolute;
-    inset: -4px;
+    inset: 0;
     border-radius: 6px;
     border: 2px solid rgba(200, 169, 110, 0.6);
     pointer-events: none;
@@ -323,7 +319,7 @@
     align-items: flex-end;
 }
 .cp-front-ruler__tick {
-    width: calc(4px + (var(--tick-i, 0) % 4 == 0) * 4px);
+    width: 4px;
     height: 1px;
     background: rgba(200, 169, 110, 0.2);
     border-radius: 1px;
@@ -632,8 +628,8 @@
 .cp-frame {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center top;
+    background-size: contain;
+    background-position: center center;
     background-repeat: no-repeat;
     transition: opacity 0.45s ease;
 }
@@ -1271,13 +1267,20 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding-top: -170px;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    padding-top: 0;
 }
 
 .cp-wrapper--expanded {
     display: flex;
     position: fixed;
     inset: 0;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    transform: none !important;
     z-index: 200;
     background: #08070a;
     align-items: stretch;
@@ -1322,6 +1325,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding: 4rem 5rem;
     opacity: 0;
     transform: translateX(40px);
@@ -1334,6 +1338,12 @@
 .ep-panel--visible {
     opacity: 1;
     transform: translateX(0);
+}
+
+.ep-dots,
+.ep-content,
+.ep-nav {
+    width: min(100%, 34rem);
 }
 
 .ep-close {
@@ -1568,9 +1578,15 @@
 ════════════════════════════════════════════════════════════ */
 .fs-panel {
     position: relative;
-    width: 100%;
-    height: calc(100vh - 64px - 100px);
-    min-height: 320px;
+    width: min(34rem, calc(100vw - 2rem));
+    max-width: none;
+    height: auto;
+    min-height: unset;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(12rem, 1fr));
+    column-gap: 0.85rem;
+    row-gap: 2rem;
+    transform: translateX(-14rem);
 }
 
 .fs-connector-svg {
@@ -1615,9 +1631,10 @@
 }
 
 .holo-card {
-    position: absolute;
+    position: relative;
     z-index: 2;
-    width: 178px;
+    width: 100%;
+    min-width: 12rem;
     flex-shrink: 0;
     transition:
         border-color 0.3s ease,
@@ -1660,6 +1677,7 @@
     gap: 0.65rem;
     padding: 0.55rem 0.85rem;
     z-index: 2;
+    min-width: 0;
 }
 .holo-card__icon {
     font-size: 0.8rem;
@@ -1680,7 +1698,10 @@
     letter-spacing: 0.06em;
     color: rgba(240, 237, 230, 0.7);
     transition: color 0.2s;
-    white-space: nowrap;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
 }
 .holo-card:hover .holo-card__label {
     color: rgba(240, 237, 230, 0.95);
@@ -1841,22 +1862,14 @@ body.hero-dof-active::before {
 
 @media (max-width: 1024px) {
     .fs-panel {
-        height: auto;
-        min-height: unset;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+        width: 100%;
         gap: 0.5rem;
+        transform: none;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .holo-card {
-        position: relative !important;
-        top: auto !important;
-        left: auto !important;
+        min-width: 0;
         transform: none !important;
-        width: auto;
-        min-width: 130px;
-        flex: 1;
         animation: holo-entrance 0.6s both !important;
     }
 }
@@ -1890,19 +1903,10 @@ body:has(.cp-wrapper--expanded) .gv-mob-tabbar {
     .fs-panel {
         width: 100%;
         max-width: 34rem;
-        height: auto;
-        min-height: unset;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.65rem;
     }
 
     .holo-card {
-        position: relative !important;
-        top: auto !important;
-        left: auto !important;
-        width: 100%;
-        min-width: 0;
         transform: none !important;
     }
 
@@ -1956,16 +1960,13 @@ body:has(.cp-wrapper--expanded) .gv-mob-tabbar {
     }
 
     .cp-wrapper--expanded .cp-scene {
-        width: 100vw !important;
-        height: min(42svh, 360px) !important;
-        min-height: 260px !important;
-        max-height: 360px !important;
+        display: none !important;
     }
 
     .ep-panel {
         flex: 1 0 auto;
-        min-height: 58svh;
-        justify-content: flex-start;
+        min-height: 100svh;
+        justify-content: center;
         padding: calc(3.75rem + env(safe-area-inset-top))
             clamp(1rem, 5vw, 1.5rem) calc(2rem + env(safe-area-inset-bottom));
         overflow-y: visible;

@@ -1,0 +1,298 @@
+/* ════════════════════════════════════════════════════════════
+   SENTIMENT GAUGE
+   Import inside landing.css: @import './sentimentgauge.css';
+   Uses the same tokens as the rest of the landing page.
+════════════════════════════════════════════════════════════ */
+
+/* ── ROOT SHELL ── */
+.sg-root {
+    --sg-shift-x: -10rem;
+    width: 100%;
+    max-width: var(--lp-side-width, 430px);
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    opacity: 1;
+    animation: none !important;
+    position: relative;
+    left: var(--sg-shift-x);
+    transform: none !important;
+}
+
+/* ── EYEBROW ── */
+.sg-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim, #4a4a48);
+    margin-bottom: 0.1rem;
+}
+.sg-eyebrow__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold, #c8a96e);
+    box-shadow: 0 0 6px rgba(200, 169, 110, 0.7);
+    flex-shrink: 0;
+    animation: none;
+}
+.sg-eyebrow__tag {
+    margin-left: auto;
+    padding: 1px 7px;
+    border: 1px solid var(--border, #1a1a1a);
+    border-radius: 1px;
+    font-size: 0.54rem;
+    letter-spacing: 0.14em;
+    color: var(--muted, #3a3a38);
+    transition:
+        border-color 0.2s,
+        color 0.2s;
+}
+.sg-root--active .sg-eyebrow__tag {
+    border-color: rgba(200, 169, 110, 0.3);
+    color: var(--gold, #c8a96e);
+}
+
+/* ── INPUT ── */
+.sg-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.sg-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.82rem, 1.4vw, 0.95rem);
+    font-weight: 300;
+    color: var(--cream, #f0ede6);
+    letter-spacing: 0.02em;
+    padding: 0.5rem 2rem 0.5rem 0;
+    caret-color: var(--gold, #c8a96e);
+}
+.sg-input::placeholder {
+    color: var(--muted, #3a3a38);
+    font-style: italic;
+}
+/* Bottom border line */
+.sg-input-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border, #1a1a1a);
+    transition: background 0.3s ease;
+    transform-origin: left;
+}
+.sg-input-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        var(--gold, #c8a96e),
+        var(--gold-light, #f0d898)
+    );
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sg-input-line--active::after {
+    transform: scaleX(1);
+}
+
+/* Spinner */
+.sg-spinner {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid rgba(200, 169, 110, 0.2);
+    border-top-color: var(--gold, #c8a96e);
+    border-radius: 50%;
+    animation: sg-spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+@keyframes sg-spin {
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+
+/* ── GAUGE BAR ── */
+.sg-gauge-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding-top: 0.3rem;
+}
+.sg-track-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.52rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint, #2a2a28);
+    user-select: none;
+}
+
+.sg-track {
+    position: relative;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--border, #1a1a1a);
+}
+
+/* The gradient fill sitting under the track */
+.sg-track-fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    background: linear-gradient(
+        90deg,
+        #3a2010 0%,
+        #5a3820 20%,
+        #2a2a28 45%,
+        #2a2a28 55%,
+        #5a4010 80%,
+        var(--gold, #c8a96e) 100%
+    );
+    opacity: 0.35;
+}
+
+/* Centre tick */
+.sg-track-tick {
+    position: absolute;
+    left: 50%;
+    top: -3px;
+    bottom: -3px;
+    width: 1px;
+    background: var(--muted, #3a3a38);
+    opacity: 0.4;
+    transform: translateX(-50%);
+}
+
+/* Animated dot */
+.sg-dot {
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--faint, #2a2a28);
+    border: 1.5px solid rgba(200, 169, 110, 0.3);
+    transform: translate(-50%, -50%) scale(0.7);
+    transition:
+        left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+        background 0.4s ease,
+        box-shadow 0.4s ease,
+        transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 2;
+}
+.sg-dot--placed {
+    transform: translate(-50%, -50%) scale(1);
+}
+/* Ripple on the dot */
+.sg-dot--placed::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    opacity: 0;
+    animation: sg-ripple 1.8s ease-out infinite;
+}
+@keyframes sg-ripple {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+/* ── RESULT ROW ── */
+.sg-result-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: none;
+    transition: opacity 0.4s ease;
+    min-height: 1.2rem;
+}
+.sg-result-row--visible {
+    opacity: 1;
+    transform: none;
+}
+.sg-result-label {
+    font-family: 'Bebas Neue', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    transition: color 0.3s ease;
+}
+.sg-result-conf {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim, #4a4a48);
+}
+.sg-result-word {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--muted, #3a3a38);
+}
+.sg-result-word em {
+    font-style: normal;
+    color: var(--gold, #c8a96e);
+}
+.sg-error {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: rgba(200, 80, 60, 0.7);
+}
+
+/* ── IDLE HINT ── */
+.sg-hint {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--faint, #2a2a28);
+    margin: 0;
+    font-style: italic;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+    .sg-root {
+        --sg-shift-x: 0px;
+        max-width: min(100%, 34rem);
+        align-self: center;
+        text-align: left;
+    }
+    .sg-track-labels {
+        font-size: 0.5rem;
+    }
+}
+@media (max-width: 600px) {
+    .sg-input {
+        font-size: 0.88rem;
+    }
+}

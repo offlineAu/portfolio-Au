@@ -17,7 +17,8 @@ RUN npm install
 RUN cp .env.example .env && \
     echo "VITE_EMAILJS_SERVICE_ID=service_88jcldf" >> .env && \
     echo "VITE_EMAILJS_TEMPLATE_ID=template_cr0xlst" >> .env && \
-    echo "VITE_EMAILJS_PUBLIC_KEY=e7JFXUQwxsNH8rZo2" >> .env
+    echo "VITE_EMAILJS_PUBLIC_KEY=e7JFXUQwxsNH8rZo2" >> .env && \
+    echo "GROQ_API_KEY=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" >> .env
 
 RUN npm run build
 

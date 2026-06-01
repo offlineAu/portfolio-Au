@@ -3,9 +3,9 @@ import { router } from '@inertiajs/react';
 import { HireMeModal } from '@/components/Portfolio/Landing/HireMeModal';
 
 const links = [
-    { label: 'About',  href: '#s-about' },
+    { label: 'About', href: '#s-about' },
     { label: 'Skills', href: '#s-skills' },
-    { label: 'Work',   href: '#s-portfolio' },
+    { label: 'Work', href: '#s-portfolio' },
 ];
 
 const sectionIds = ['s-about', 's-skills', 's-portfolio', 's-contact'];
@@ -16,9 +16,9 @@ interface NavbarProps {
 }
 
 export function Navbar({ isLanding = false, onOpenPicker }: NavbarProps) {
-    const [active, setActive]   = useState('s-about');
+    const [active, setActive] = useState('s-about');
     const [scrolled, setScrolled] = useState(false);
-    const [hidden, setHidden]   = useState(false);
+    const [hidden, setHidden] = useState(false);
     const [hireMeOpen, setHireMeOpen] = useState(false);
     const lastY = useRef(0);
 
@@ -66,8 +66,9 @@ export function Navbar({ isLanding = false, onOpenPicker }: NavbarProps) {
             <nav
                 className={[
                     'gv-navbar',
+                    isLanding ? 'gv-navbar--landing' : '',
                     scrolled ? 'gv-navbar--scrolled' : '',
-                    hidden   ? 'gv-navbar--hidden'   : '',
+                    hidden ? 'gv-navbar--hidden' : '',
                 ].join(' ')}
                 aria-label="Main navigation"
             >
@@ -81,32 +82,38 @@ export function Navbar({ isLanding = false, onOpenPicker }: NavbarProps) {
                                 router.visit('/');
                             }
                         }}
-                        aria-label={isLanding ? 'Back to top' : 'Back to landing'}
+                        aria-label={
+                            isLanding ? 'Back to top' : 'Back to landing'
+                        }
                     >
                         Au<span>.</span>
                     </button>
 
                     {/* Section links — hidden on landing */}
-                    {!isLanding && links.map((l) => {
-                        const id = l.href.replace('#', '');
-                        return (
-                            <button
-                                key={l.href}
-                                className={`gv-nav-link${active === id ? ' active' : ''}`}
-                                onClick={() => scrollTo(l.href)}
-                            >
-                                {l.label}
-                                <span className="gv-nav-dot" aria-hidden="true" />
-                            </button>
-                        );
-                    })}
+                    {!isLanding &&
+                        links.map((l) => {
+                            const id = l.href.replace('#', '');
+                            return (
+                                <button
+                                    key={l.href}
+                                    className={[
+                                        'gv-nav-link',
+                                        active === id ? 'active' : '',
+                                    ].join(' ')}
+                                    onClick={() => scrollTo(l.href)}
+                                >
+                                    {l.label}
+                                    <span
+                                        className="gv-nav-dot"
+                                        aria-hidden="true"
+                                    />
+                                </button>
+                            );
+                        })}
 
                     {/* Change Perspective — only on portfolio */}
                     {!isLanding && onOpenPicker && (
-                        <button
-                            className="gv-nav-link"
-                            onClick={onOpenPicker}
-                        >
+                        <button className="gv-nav-link" onClick={onOpenPicker}>
                             Perspective
                             <span className="gv-nav-dot" aria-hidden="true" />
                         </button>
@@ -123,36 +130,56 @@ export function Navbar({ isLanding = false, onOpenPicker }: NavbarProps) {
                 <nav className="gv-mob-tabbar" aria-label="Mobile navigation">
                     <div className="gv-mob-pill">
                         {links.map((l) => {
-                            const id    = l.href.replace('#', '');
+                            const id = l.href.replace('#', '');
                             const isAct = active === id;
                             return (
                                 <button
                                     key={l.href}
-                                    className={`gv-mob-tab${isAct ? ' active' : ''}`}
+                                    className={[
+                                        'gv-mob-tab',
+                                        isAct ? 'active' : '',
+                                    ].join(' ')}
                                     onClick={() => scrollTo(l.href)}
                                     aria-current={isAct ? 'page' : undefined}
                                 >
-                                    <span className="gv-mob-icon" aria-hidden="true">
+                                    <span
+                                        className="gv-mob-icon"
+                                        aria-hidden="true"
+                                    >
                                         {icon(l.label)}
                                     </span>
-                                    {isAct && <span className="gv-mob-dot" aria-hidden="true" />}
-                                    <span className="gv-mob-label">{l.label}</span>
+                                    {isAct && (
+                                        <span
+                                            className="gv-mob-dot"
+                                            aria-hidden="true"
+                                        />
+                                    )}
+                                    <span className="gv-mob-label">
+                                        {l.label}
+                                    </span>
                                 </button>
                             );
                         })}
                     </div>
                 </nav>
             )}
-            <HireMeModal open={hireMeOpen} onClose={() => setHireMeOpen(false)} />
+            <HireMeModal
+                open={hireMeOpen}
+                onClose={() => setHireMeOpen(false)}
+            />
         </>
     );
 }
 
 function icon(label: string) {
     switch (label) {
-        case 'About':  return '◈';
-        case 'Skills': return '◎';
-        case 'Work':   return '◉';
-        default:       return '·';
+        case 'About':
+            return '◈';
+        case 'Skills':
+            return '◎';
+        case 'Work':
+            return '◉';
+        default:
+            return '·';
     }
 }

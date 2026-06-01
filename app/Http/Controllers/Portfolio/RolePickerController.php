@@ -17,8 +17,12 @@ class RolePickerController extends Controller
 
         $request->session()->put('selected_role', $validated['role']);
 
-        // Landing page roles redirect to full portfolio
         if (($validated['redirect_to'] ?? 'portfolio') === 'portfolio') {
+            // Recruiters get their own dedicated page
+            if ($validated['role'] === 'recruiter') {
+                return redirect()->route('portfolio.recruiter');
+            }
+
             return redirect()->route('portfolio.full');
         }
 

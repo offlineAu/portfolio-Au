@@ -103,21 +103,6 @@ function generateOrbitPositions(rect: DOMRect): Array<{x:number;y:number}> {
     });
 }
 
-const CARD_OFFSETS = [
-    { ox: -125, oy: 0 }, { ox: -180, oy: 0 }, { ox: -120, oy: 0 },
-    { ox: -165, oy: 0 }, { ox: -190, oy: 0 }, { ox: -120, oy: 0 },
-];
-
-export function getCardPositions(panelH: number) {
-    const baseSpacing = panelH / CORE_STATS.length;
-    return CORE_STATS.map((_, i) => ({
-        top:  baseSpacing * i + baseSpacing * 0.5 + CARD_OFFSETS[i].oy,
-        left: CARD_OFFSETS[i].ox,
-        svgX: 40 + CARD_OFFSETS[i].ox,
-        svgY: baseSpacing * i + baseSpacing * 0.5 + CARD_OFFSETS[i].oy,
-    }));
-}
-
 /* ════════════════════════════════════════════════════════════
    BURN CANVAS
    FIX: Canvas starts fully opaque black on frame 0,
@@ -667,7 +652,13 @@ function RoboticFrame({ hovered }: { hovered: boolean }) {
 /* ════════════════════════════════════════════════════════════
    MAIN COMPONENT
 ════════════════════════════════════════════════════════════ */
-export function CinematicPortrait({ onLocked }: { onLocked?: () => void }) {
+export function CinematicPortrait({
+    onLocked,
+    expandRequest = 0,
+}: {
+    onLocked?: () => void;
+    expandRequest?: number;
+}) {
     const sceneRef = useRef<HTMLDivElement>(null);
 
     // At the top of CinematicPortrait component, add:
@@ -750,6 +741,20 @@ export function CinematicPortrait({ onLocked }: { onLocked?: () => void }) {
             resetIdleTimer();
         }
     }, [burnReverse, resetIdleTimer]);
+
+    useEffect(() => {
+        if (expandRequest <= 0) return;
+        if (hoverTimer.current) clearTimeout(hoverTimer.current);
+        clearIdleTimer();
+        setIsHovered(false);
+        setBurning(false);
+        setBurnReverse(false);
+        setFlipping(false);
+        setBurnComplete(true);
+        setShowFront(true);
+        setActiveStatIdx(0);
+        setStage(3);
+    }, [expandRequest, clearIdleTimer]);
 
     const handleFrontMouseEnter = useCallback(() => {
         if (stage !== 1) return;
@@ -954,43 +959,12 @@ export function CinematicPortrait({ onLocked }: { onLocked?: () => void }) {
 }
 
 /* ── FLOATING STATS ──────────────────────────────────────── */
-function ConnectorLines({ panelH }: { panelH: number }) {
-    const BLEED = 40;
-    const SVG_W = BLEED + 240;
-    const positions = getCardPositions(panelH);
-    const cx = BLEED;
-    const cy = panelH * 0.5;
-    const spineTop    = Math.min(...positions.map(p => p.svgY));
-    const spineBottom = Math.max(...positions.map(p => p.svgY));
-    return (
-        <svg className="fs-connector-svg" viewBox={`0 0 ${SVG_W} ${panelH}`}
-            preserveAspectRatio="xMidYMid meet" aria-hidden
-            style={{ left: `-${BLEED}px`, width: `calc(100% + ${BLEED}px)` }}>
-            <line x1={cx} y1={spineTop} x2={cx} y2={spineBottom}
-                stroke="rgba(200,169,110,0.1)" strokeWidth="0.6" strokeLinecap="round" />
-            <circle cx={cx} cy={cy} r="8" fill="none" stroke="rgba(200,169,110,0.15)" strokeWidth="0.8" />
-            <circle cx={cx} cy={cy} r="4" className="fs-anchor-dot" />
-            {positions.map((p, i) => (
-                <g key={i}>
-                    <line x1={cx} y1={cy} x2={p.svgX} y2={p.svgY}
-                        className="fs-connector-line" style={{ animationDelay: `${-i * 0.5}s` }} />
-                    <circle cx={p.svgX} cy={p.svgY} r="2.5"
-                        className="fs-connector-dot" style={{ animationDelay: `${i * 0.4}s` }} />
-                </g>
-            ))}
-        </svg>
-    );
-}
-
-function HolographicCard({ stat, index, isPortraitHovered, top, left }: {
+function HolographicCard({ stat, index }: {
     stat: typeof CORE_STATS[0]; index: number;
-    isPortraitHovered: boolean; top: number; left: number;
 }) {
     return (
         <div className={`holo-card holo-card--${stat.id}`} style={{
             '--card-color': stat.color, '--float-delay': `${index * 0.3}s`,
-            position: 'absolute', top: `${top}px`, left: `${left}px`,
-            transform: 'translateY(-50%)',
         } as React.CSSProperties}>
             <div className="holo-card__link-line" />
             <div className="holo-card__inner">
@@ -1006,24 +980,10 @@ function HolographicCard({ stat, index, isPortraitHovered, top, left }: {
 }
 
 export function FloatingStats({ isPortraitHovered }: { isPortraitHovered?: boolean }) {
-    const panelRef = useRef<HTMLDivElement>(null);
-    const [panelH, setPanelH] = useState(480);
-    useEffect(() => {
-        if (!panelRef.current) return;
-        const ro = new ResizeObserver(entries => {
-            for (const e of entries) { const h = e.contentRect.height; if (h > 0) setPanelH(h); }
-        });
-        ro.observe(panelRef.current);
-        return () => ro.disconnect();
-    }, []);
-    const positions = getCardPositions(panelH);
     return (
-        <div className="fs-panel" ref={panelRef}>
-            <ConnectorLines panelH={panelH} />
+        <div className="fs-panel">
             {CORE_STATS.map((stat, i) => (
-                <HolographicCard key={stat.id} stat={stat} index={i}
-                    isPortraitHovered={!!isPortraitHovered}
-                    top={positions[i].top} left={positions[i].left} />
+                <HolographicCard key={stat.id} stat={stat} index={i} />
             ))}
         </div>
     );

@@ -173,11 +173,6 @@ export function HireMeModal({ open, onClose }: HireMeModalProps) {
                                 </a>
                             </li>
                         </ul>
-
-                        <div className="hm-availability">
-                            <span className="hm-availability__dot" />
-                            <span className="hm-availability__text">Usually responds within 24 hours</span>
-                        </div>
                     </div>
 
                     {/* RIGHT: FORM */}
@@ -266,6 +261,10 @@ export function HireMeModal({ open, onClose }: HireMeModalProps) {
                                 </button>
                             </>
                         )}
+                        <div className="hm-availability">
+                            <span className="hm-availability__dot" />
+                            <span className="hm-availability__text">Usually responds within 24 hours</span>
+                        </div>
                     </div>
                 </div>
             </div>
