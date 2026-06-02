@@ -9,7 +9,7 @@ class GroqService
 {
     private string $apiKey;
     private string $baseUrl = 'https://api.groq.com/openai/v1';
-    private string $model   = 'llama3-8b-8192'; // fast + free tier
+    private string $model = 'llama-3.1-8b-instant'; // fast + free tier
 
     public function __construct()
     {

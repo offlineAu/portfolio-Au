@@ -61,6 +61,7 @@ return array(
     'App\\Rules\\TeamName' => $baseDir . '/app/Rules/TeamName.php',
     'App\\Rules\\UniqueTeamInvitation' => $baseDir . '/app/Rules/UniqueTeamInvitation.php',
     'App\\Rules\\ValidTeamInvitation' => $baseDir . '/app/Rules/ValidTeamInvitation.php',
+    'App\\Services\\GroqService' => $baseDir . '/app/Services/GroqService.php',
     'App\\Services\\ProfileDataService' => $baseDir . '/app/Services/ProfileDataService.php',
     'App\\Services\\ProfileImageService' => $baseDir . '/app/Services/ProfileImageService.php',
     'App\\Support\\TeamPermissions' => $baseDir . '/app/Support/TeamPermissions.php',

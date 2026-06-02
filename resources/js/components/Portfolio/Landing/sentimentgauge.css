@@ -6,7 +6,6 @@
 
 /* ── ROOT SHELL ── */
 .sg-root {
-    --sg-shift-x: -10rem;
     width: 100%;
     max-width: var(--lp-side-width, 430px);
     display: flex;
@@ -15,8 +14,6 @@
     opacity: 1;
     animation: none !important;
     position: relative;
-    left: var(--sg-shift-x);
-    transform: none !important;
 }
 
 /* ── EYEBROW ── */
@@ -31,6 +28,7 @@
     color: var(--dim, #4a4a48);
     margin-bottom: 0.1rem;
 }
+
 .sg-eyebrow__dot {
     width: 5px;
     height: 5px;
@@ -40,6 +38,7 @@
     flex-shrink: 0;
     animation: none;
 }
+
 .sg-eyebrow__tag {
     margin-left: auto;
     padding: 1px 7px;
@@ -52,6 +51,7 @@
         border-color 0.2s,
         color 0.2s;
 }
+
 .sg-root--active .sg-eyebrow__tag {
     border-color: rgba(200, 169, 110, 0.3);
     color: var(--gold, #c8a96e);
@@ -63,6 +63,7 @@
     display: flex;
     align-items: center;
 }
+
 .sg-input {
     width: 100%;
     background: transparent;
@@ -76,10 +77,12 @@
     padding: 0.5rem 2rem 0.5rem 0;
     caret-color: var(--gold, #c8a96e);
 }
+
 .sg-input::placeholder {
     color: var(--muted, #3a3a38);
     font-style: italic;
 }
+
 /* Bottom border line */
 .sg-input-line {
     position: absolute;
@@ -91,19 +94,19 @@
     transition: background 0.3s ease;
     transform-origin: left;
 }
+
 .sg-input-line::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        90deg,
-        var(--gold, #c8a96e),
-        var(--gold-light, #f0d898)
-    );
+    background: linear-gradient(90deg,
+            var(--gold, #c8a96e),
+            var(--gold-light, #f0d898));
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .sg-input-line--active::after {
     transform: scaleX(1);
 }
@@ -122,6 +125,7 @@
     animation: sg-spin 0.7s linear infinite;
     flex-shrink: 0;
 }
+
 @keyframes sg-spin {
     to {
         transform: translateY(-50%) rotate(360deg);
@@ -135,6 +139,7 @@
     gap: 0.45rem;
     padding-top: 0.3rem;
 }
+
 .sg-track-labels {
     display: flex;
     justify-content: space-between;
@@ -158,15 +163,13 @@
     position: absolute;
     inset: 0;
     border-radius: 2px;
-    background: linear-gradient(
-        90deg,
-        #3a2010 0%,
-        #5a3820 20%,
-        #2a2a28 45%,
-        #2a2a28 55%,
-        #5a4010 80%,
-        var(--gold, #c8a96e) 100%
-    );
+    background: linear-gradient(90deg,
+            #3a2010 0%,
+            #5a3820 20%,
+            #2a2a28 45%,
+            #2a2a28 55%,
+            #5a4010 80%,
+            var(--gold, #c8a96e) 100%);
     opacity: 0.35;
 }
 
@@ -199,9 +202,11 @@
         transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 2;
 }
+
 .sg-dot--placed {
     transform: translate(-50%, -50%) scale(1);
 }
+
 /* Ripple on the dot */
 .sg-dot--placed::after {
     content: '';
@@ -212,11 +217,13 @@
     opacity: 0;
     animation: sg-ripple 1.8s ease-out infinite;
 }
+
 @keyframes sg-ripple {
     0% {
         transform: scale(0.6);
         opacity: 0.6;
     }
+
     100% {
         transform: scale(2.2);
         opacity: 0;
@@ -234,10 +241,12 @@
     transition: opacity 0.4s ease;
     min-height: 1.2rem;
 }
+
 .sg-result-row--visible {
     opacity: 1;
     transform: none;
 }
+
 .sg-result-label {
     font-family: 'Bebas Neue', serif;
     font-size: 0.95rem;
@@ -245,6 +254,7 @@
     line-height: 1;
     transition: color 0.3s ease;
 }
+
 .sg-result-conf {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.58rem;
@@ -252,16 +262,19 @@
     text-transform: uppercase;
     color: var(--dim, #4a4a48);
 }
+
 .sg-result-word {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.58rem;
     letter-spacing: 0.1em;
     color: var(--muted, #3a3a38);
 }
+
 .sg-result-word em {
     font-style: normal;
     color: var(--gold, #c8a96e);
 }
+
 .sg-error {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.6rem;
@@ -282,15 +295,16 @@
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
     .sg-root {
-        --sg-shift-x: 0px;
         max-width: min(100%, 34rem);
         align-self: center;
         text-align: left;
     }
+
     .sg-track-labels {
         font-size: 0.5rem;
     }
 }
+
 @media (max-width: 600px) {
     .sg-input {
         font-size: 0.88rem;
