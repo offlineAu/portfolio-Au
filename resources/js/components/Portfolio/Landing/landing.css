@@ -1005,6 +1005,7 @@ body {
         margin-top: 1.5rem;
         padding-top: 1.5rem;
         width: min(100%, 34rem);
+        transform: translateX(0.1rem);
 
 
     }
