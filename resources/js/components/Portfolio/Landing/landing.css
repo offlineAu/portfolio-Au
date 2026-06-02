@@ -610,6 +610,16 @@ body {
     transform: none !important;
 }
 
+.lp-hero-center .cp-wrapper--expanded .cp-scene {
+    width: auto !important;
+    max-width: 35vw !important;
+    height: 85vh !important;
+    max-height: none !important;
+    aspect-ratio: 0.55 / 1 !important;
+    margin: auto 0 auto 5vw !important;
+    left: 0 !important;
+}
+
 .lp-hero-center .cp-scene {
     width: min(var(--lp-portrait-width),
             calc(var(--lp-portrait-height) * var(--lp-card-ratio))) !important;

@@ -14,12 +14,12 @@ const IDLE_REVERSE_MS = 45_000;
 
 /* ── DATA ─────────────────────────────────────────────────── */
 const CORE_STATS = [
-    { id: 'role', label: 'Web Developer',        icon: '⬡', color: '#c8a96e' },
-    { id: 'spec', label: 'Laravel + React',       icon: '◈', color: '#e8c98e' },
-    { id: 'ui',   label: 'Backend Focused',       icon: '◉', color: '#c8a96e' },
-    { id: 'ai',   label: 'AI Patron',             icon: '✦', color: '#f0d898' },
-    { id: 'ml',   label: 'ML / NLP Enthusiast',   icon: '⬡', color: '#c8a96e' },
-    { id: 'cap',  label: 'Capstone: SentiSphere', icon: '◈', color: '#e8c98e' },
+    { id: 'role', label: 'Web Developer', icon: '⬡', color: '#c8a96e' },
+    { id: 'spec', label: 'Laravel + React', icon: '◈', color: '#e8c98e' },
+    { id: 'ui', label: 'Backend Focused', icon: '◉', color: '#c8a96e' },
+    { id: 'ai', label: 'AI Patron', icon: '✦', color: '#f0d898' },
+    { id: 'ml', label: 'ML / NLP Enthusiast', icon: '⬡', color: '#c8a96e' },
+    { id: 'cap', label: 'Capstone: SentiSphere', icon: '◈', color: '#e8c98e' },
 ];
 
 const EXPANDED_STATS = [
@@ -81,13 +81,13 @@ const EXPANDED_STATS = [
 ];
 
 /* ── ORBIT POSITIONS ─────────────────────────────────────── */
-function generateOrbitPositions(rect: DOMRect): Array<{x:number;y:number}> {
-    const cx = rect.left + rect.width  / 2;
-    const cy = rect.top  + rect.height / 2;
+function generateOrbitPositions(rect: DOMRect): Array<{ x: number; y: number }> {
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
     const baseAngles = [-140, -60, 20, 80, 140, -100];
     const CARD_W = 115;
     const CARD_H = 76;
-    const PAD    = 12;
+    const PAD = 12;
     return baseAngles.map((baseAngle) => {
         const angle = baseAngle + (Math.random() - 0.5) * 30;
         const minDist = rect.width * 0.72;
@@ -97,7 +97,7 @@ function generateOrbitPositions(rect: DOMRect): Array<{x:number;y:number}> {
         const rawX = cx + Math.cos(rad) * dist;
         const rawY = cy + Math.sin(rad) * dist;
         return {
-            x: Math.max(CARD_W / 2 + PAD, Math.min(window.innerWidth  - CARD_W / 2 - PAD, rawX)),
+            x: Math.max(CARD_W / 2 + PAD, Math.min(window.innerWidth - CARD_W / 2 - PAD, rawX)),
             y: Math.max(CARD_H / 2 + PAD, Math.min(window.innerHeight - CARD_H / 2 - PAD, rawY)),
         };
     });
@@ -115,376 +115,376 @@ function generateOrbitPositions(rect: DOMRect): Array<{x:number;y:number}> {
 ════════════════════════════════════════════════════════════ */
 
 function makeNoise() {
-  const perm = new Uint8Array(512);
-  for (let i = 0; i < 256; i++) perm[i] = perm[i + 256] = (Math.random() * 256) | 0;
-  return function noise2(x: number, y: number): number {
-    const X = Math.floor(x) & 255, Y = Math.floor(y) & 255;
-    const xf = x - Math.floor(x), yf = y - Math.floor(y);
-    const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
-    const h = (n: number, dx: number, dy: number) => {
-      const g = perm[n & 255] % 4;
-      return [1, 1, -1, -1][g] * dx + [1, -1, 1, -1][g] * dy;
+    const perm = new Uint8Array(512);
+    for (let i = 0; i < 256; i++) perm[i] = perm[i + 256] = (Math.random() * 256) | 0;
+    return function noise2(x: number, y: number): number {
+        const X = Math.floor(x) & 255, Y = Math.floor(y) & 255;
+        const xf = x - Math.floor(x), yf = y - Math.floor(y);
+        const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+        const h = (n: number, dx: number, dy: number) => {
+            const g = perm[n & 255] % 4;
+            return [1, 1, -1, -1][g] * dx + [1, -1, 1, -1][g] * dy;
+        };
+        const a = perm[X] + Y, b = perm[X + 1] + Y;
+        return (
+            h(perm[a], xf, yf) * (1 - u) * (1 - v) +
+            h(perm[b], xf - 1, yf) * u * (1 - v) +
+            h(perm[a + 1], xf, yf - 1) * (1 - u) * v +
+            h(perm[b + 1], xf - 1, yf - 1) * u * v
+        );
     };
-    const a = perm[X] + Y, b = perm[X + 1] + Y;
-    return (
-      h(perm[a], xf, yf) * (1 - u) * (1 - v) +
-      h(perm[b], xf - 1, yf) * u * (1 - v) +
-      h(perm[a + 1], xf, yf - 1) * (1 - u) * v +
-      h(perm[b + 1], xf - 1, yf - 1) * u * v
-    );
-  };
 }
 
 const MAX_P = 520;
 interface ParticlePool {
-  x: Float32Array; y: Float32Array;
-  vx: Float32Array; vy: Float32Array;
-  life: Float32Array; maxLife: Float32Array;
-  size: Float32Array; type: Uint8Array;
-  count: number;
+    x: Float32Array; y: Float32Array;
+    vx: Float32Array; vy: Float32Array;
+    life: Float32Array; maxLife: Float32Array;
+    size: Float32Array; type: Uint8Array;
+    count: number;
 }
 function makePool(): ParticlePool {
-  return {
-    x: new Float32Array(MAX_P), y: new Float32Array(MAX_P),
-    vx: new Float32Array(MAX_P), vy: new Float32Array(MAX_P),
-    life: new Float32Array(MAX_P), maxLife: new Float32Array(MAX_P),
-    size: new Float32Array(MAX_P), type: new Uint8Array(MAX_P),
-    count: 0,
-  };
+    return {
+        x: new Float32Array(MAX_P), y: new Float32Array(MAX_P),
+        vx: new Float32Array(MAX_P), vy: new Float32Array(MAX_P),
+        life: new Float32Array(MAX_P), maxLife: new Float32Array(MAX_P),
+        size: new Float32Array(MAX_P), type: new Uint8Array(MAX_P),
+        count: 0,
+    };
 }
 
 function spawnParticle(p: ParticlePool, x: number, y: number, intense: number) {
-  if (p.count >= MAX_P) return;
-  const i = p.count++;
-  p.x[i] = x + (Math.random() - 0.5) * 28;
-  p.y[i] = y + (Math.random() - 0.5) * 6;
-  p.vx[i] = (Math.random() - 0.5) * 1.4;
-  p.vy[i] = -(0.15+ Math.random() * 1.0) * intense;
-  p.life[i] = 1;
-  p.maxLife[i] = 60 + Math.random() * 160;
-  p.size[i] = 0.5 + Math.random() * 1.8;
-  const r = Math.random();
-  p.type[i] = r < 0.22 ? 1 : r < 0.38 ? 2 : 0;
+    if (p.count >= MAX_P) return;
+    const i = p.count++;
+    p.x[i] = x + (Math.random() - 0.5) * 28;
+    p.y[i] = y + (Math.random() - 0.5) * 6;
+    p.vx[i] = (Math.random() - 0.5) * 1.4;
+    p.vy[i] = -(0.15 + Math.random() * 1.0) * intense;
+    p.life[i] = 1;
+    p.maxLife[i] = 60 + Math.random() * 160;
+    p.size[i] = 0.5 + Math.random() * 1.8;
+    const r = Math.random();
+    p.type[i] = r < 0.22 ? 1 : r < 0.38 ? 2 : 0;
 }
 
 function tickParticles(p: ParticlePool) {
-  let alive = 0;
-  for (let i = 0; i < p.count; i++) {
-    p.life[i] -= 1 / p.maxLife[i];
-    if (p.life[i] <= 0) continue;
-    p.vx[i] += (Math.random() - 0.5) * 0.08;
-    p.vy[i] -= 0.01 + Math.random() * 0.009;
-    p.x[i] += p.vx[i];
-    p.y[i] += p.vy[i];
-    p.x[alive] = p.x[i]; p.y[alive] = p.y[i];
-    p.vx[alive] = p.vx[i]; p.vy[alive] = p.vy[i];
-    p.life[alive] = p.life[i]; p.maxLife[alive] = p.maxLife[i];
-    p.size[alive] = p.size[i]; p.type[alive] = p.type[i];
-    alive++;
-  }
-  p.count = alive;
+    let alive = 0;
+    for (let i = 0; i < p.count; i++) {
+        p.life[i] -= 1 / p.maxLife[i];
+        if (p.life[i] <= 0) continue;
+        p.vx[i] += (Math.random() - 0.5) * 0.08;
+        p.vy[i] -= 0.01 + Math.random() * 0.009;
+        p.x[i] += p.vx[i];
+        p.y[i] += p.vy[i];
+        p.x[alive] = p.x[i]; p.y[alive] = p.y[i];
+        p.vx[alive] = p.vx[i]; p.vy[alive] = p.vy[i];
+        p.life[alive] = p.life[i]; p.maxLife[alive] = p.maxLife[i];
+        p.size[alive] = p.size[i]; p.type[alive] = p.type[i];
+        alive++;
+    }
+    p.count = alive;
 }
 
 function drawParticles(ctx: CanvasRenderingContext2D, p: ParticlePool) {
-  for (let i = 0; i < p.count; i++) {
-    const t = p.life[i];
-    if (p.type[i] === 1) {
-      const a = t < 0.3 ? t / 0.3 : t;
-      const grad = ctx.createRadialGradient(p.x[i], p.y[i], 0, p.x[i], p.y[i], p.size[i] * 3);
-      grad.addColorStop(0, `rgba(255,252,220,${a * 0.7})`);
-      grad.addColorStop(1, `rgba(0,0,0,0)`);
-      ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i] * 3, 0, Math.PI * 2);
-      ctx.fillStyle = grad; ctx.fill();
-      ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i] * 0.55, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,245,190,${a * 0.9})`; ctx.fill();
-    } else if (p.type[i] === 2) {
-      const a = (t < 0.4 ? t / 0.4 : 1 - (t - 0.4) / 0.6) * 0.26;
-      ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i] * 4.0, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(20,12,4,${a})`; ctx.fill();
-    } else {
-      const g = (85 + t * 115) | 0;
-      const a = t < 0.2 ? t / 0.2 : t > 0.75 ? (1 - t) / 0.25 : 1;
-      const grad = ctx.createRadialGradient(p.x[i], p.y[i], 0, p.x[i], p.y[i], p.size[i] * 4.5);
-      grad.addColorStop(0,   `rgba(255,${g},15,${a * 0.4})`);
-      grad.addColorStop(0.4, `rgba(255,${Math.min(g + 40, 220)},30,${a * 0.18})`);
-      grad.addColorStop(1,   `rgba(0,0,0,0)`);
-      ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i] * 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = grad; ctx.fill();
-      ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i], 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,${g},15,${a * 0.85})`; ctx.fill();
+    for (let i = 0; i < p.count; i++) {
+        const t = p.life[i];
+        if (p.type[i] === 1) {
+            const a = t < 0.3 ? t / 0.3 : t;
+            const grad = ctx.createRadialGradient(p.x[i], p.y[i], 0, p.x[i], p.y[i], p.size[i] * 3);
+            grad.addColorStop(0, `rgba(255,252,220,${a * 0.7})`);
+            grad.addColorStop(1, `rgba(0,0,0,0)`);
+            ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i] * 3, 0, Math.PI * 2);
+            ctx.fillStyle = grad; ctx.fill();
+            ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i] * 0.55, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,245,190,${a * 0.9})`; ctx.fill();
+        } else if (p.type[i] === 2) {
+            const a = (t < 0.4 ? t / 0.4 : 1 - (t - 0.4) / 0.6) * 0.26;
+            ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i] * 4.0, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(20,12,4,${a})`; ctx.fill();
+        } else {
+            const g = (85 + t * 115) | 0;
+            const a = t < 0.2 ? t / 0.2 : t > 0.75 ? (1 - t) / 0.25 : 1;
+            const grad = ctx.createRadialGradient(p.x[i], p.y[i], 0, p.x[i], p.y[i], p.size[i] * 4.5);
+            grad.addColorStop(0, `rgba(255,${g},15,${a * 0.4})`);
+            grad.addColorStop(0.4, `rgba(255,${Math.min(g + 40, 220)},30,${a * 0.18})`);
+            grad.addColorStop(1, `rgba(0,0,0,0)`);
+            ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i] * 2.2, 0, Math.PI * 2);
+            ctx.fillStyle = grad; ctx.fill();
+            ctx.beginPath(); ctx.arc(p.x[i], p.y[i], p.size[i], 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,${g},15,${a * 0.85})`; ctx.fill();
+        }
     }
-  }
 }
 
 
 function drawFlameTongue(
-  ctx: CanvasRenderingContext2D,
-  cx: number, baseY: number,
-  width: number, height: number,
-  intensity: number,
-  noise: ReturnType<typeof makeNoise>,
-  t: number
+    ctx: CanvasRenderingContext2D,
+    cx: number, baseY: number,
+    width: number, height: number,
+    intensity: number,
+    noise: ReturnType<typeof makeNoise>,
+    t: number
 ) {
-  if (intensity <= 0 || height <= 0) return;
-  const w1 = noise(cx * 0.04 + t * 0.28, baseY * 0.035) * width * 0.45;
-  const w2 = noise(cx * 0.06 + t * 0.18, baseY * 0.06 + 10) * width * 0.25;
+    if (intensity <= 0 || height <= 0) return;
+    const w1 = noise(cx * 0.04 + t * 0.28, baseY * 0.035) * width * 0.45;
+    const w2 = noise(cx * 0.06 + t * 0.18, baseY * 0.06 + 10) * width * 0.25;
 
-  ctx.beginPath();
-  ctx.moveTo(cx - width * 0.52 + w1, baseY);
-  ctx.bezierCurveTo(cx - width * 0.65 + w1, baseY - height * 0.35, cx - width * 0.22 + w1 * 0.6, baseY - height * 0.78, cx + w1 * 0.3, baseY - height);
-  ctx.bezierCurveTo(cx + width * 0.22 + w1 * 0.6, baseY - height * 0.78, cx + width * 0.65 + w1, baseY - height * 0.35, cx + width * 0.52 + w1, baseY);
-  ctx.closePath();
-  const g1 = ctx.createLinearGradient(cx, baseY - height, cx, baseY);
-  g1.addColorStop(0, `rgba(40,10,0,0)`);
-  g1.addColorStop(0.25, `rgba(160,45,0,${intensity * 0.45})`);
-  g1.addColorStop(0.65, `rgba(210,100,5,${intensity * 0.72})`);
-  g1.addColorStop(1, `rgba(190,130,20,${intensity * 0.88})`);
-  ctx.fillStyle = g1; ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(cx - width * 0.52 + w1, baseY);
+    ctx.bezierCurveTo(cx - width * 0.65 + w1, baseY - height * 0.35, cx - width * 0.22 + w1 * 0.6, baseY - height * 0.78, cx + w1 * 0.3, baseY - height);
+    ctx.bezierCurveTo(cx + width * 0.22 + w1 * 0.6, baseY - height * 0.78, cx + width * 0.65 + w1, baseY - height * 0.35, cx + width * 0.52 + w1, baseY);
+    ctx.closePath();
+    const g1 = ctx.createLinearGradient(cx, baseY - height, cx, baseY);
+    g1.addColorStop(0, `rgba(40,10,0,0)`);
+    g1.addColorStop(0.25, `rgba(160,45,0,${intensity * 0.45})`);
+    g1.addColorStop(0.65, `rgba(210,100,5,${intensity * 0.72})`);
+    g1.addColorStop(1, `rgba(190,130,20,${intensity * 0.88})`);
+    ctx.fillStyle = g1; ctx.fill();
 
-  const ww = width * 0.60, hh = height * 0.70;
-  ctx.beginPath();
-  ctx.moveTo(cx - ww * 0.42 + w2, baseY);
-  ctx.bezierCurveTo(cx - ww * 0.55 + w2, baseY - hh * 0.45, cx - ww * 0.12 + w2 * 0.5, baseY - hh * 0.88, cx + w2 * 0.2, baseY - hh);
-  ctx.bezierCurveTo(cx + ww * 0.12 + w2 * 0.5, baseY - hh * 0.88, cx + ww * 0.55 + w2, baseY - hh * 0.45, cx + ww * 0.42 + w2, baseY);
-  ctx.closePath();
-  const g2 = ctx.createLinearGradient(cx, baseY - hh, cx, baseY);
-  g2.addColorStop(0, `rgba(230,170,30,0)`);
-  g2.addColorStop(0.35, `rgba(240,175,35,${intensity * 0.6})`);
-  g2.addColorStop(0.75, `rgba(255,195,50,${intensity * 0.82})`);
-  g2.addColorStop(1, `rgba(255,205,60,${intensity * 0.94})`);
-  ctx.fillStyle = g2; ctx.fill();
+    const ww = width * 0.60, hh = height * 0.70;
+    ctx.beginPath();
+    ctx.moveTo(cx - ww * 0.42 + w2, baseY);
+    ctx.bezierCurveTo(cx - ww * 0.55 + w2, baseY - hh * 0.45, cx - ww * 0.12 + w2 * 0.5, baseY - hh * 0.88, cx + w2 * 0.2, baseY - hh);
+    ctx.bezierCurveTo(cx + ww * 0.12 + w2 * 0.5, baseY - hh * 0.88, cx + ww * 0.55 + w2, baseY - hh * 0.45, cx + ww * 0.42 + w2, baseY);
+    ctx.closePath();
+    const g2 = ctx.createLinearGradient(cx, baseY - hh, cx, baseY);
+    g2.addColorStop(0, `rgba(230,170,30,0)`);
+    g2.addColorStop(0.35, `rgba(240,175,35,${intensity * 0.6})`);
+    g2.addColorStop(0.75, `rgba(255,195,50,${intensity * 0.82})`);
+    g2.addColorStop(1, `rgba(255,205,60,${intensity * 0.94})`);
+    ctx.fillStyle = g2; ctx.fill();
 
-  const w3 = width * 0.26, h3 = height * 0.36;
-  const w3b = noise(cx * 0.08 + t * 0.4, baseY * 0.08 + 20) * w3 * 0.3;
-  ctx.beginPath();
-  ctx.moveTo(cx - w3 * 0.32 + w3b, baseY);
-  ctx.bezierCurveTo(cx - w3 * 0.42 + w3b, baseY - h3 * 0.55, cx + w3b * 0.5, baseY - h3, cx + w3b * 0.1, baseY - h3);
-  ctx.bezierCurveTo(cx + w3b * 0.5, baseY - h3, cx + w3 * 0.42 + w3b, baseY - h3 * 0.55, cx + w3 * 0.32 + w3b, baseY);
-  ctx.closePath();
-  const g3 = ctx.createLinearGradient(cx, baseY - h3, cx, baseY);
-  g3.addColorStop(0, `rgba(255,255,230,0)`);
-  g3.addColorStop(0.4, `rgba(255,252,210,${intensity * 0.55})`);
-  g3.addColorStop(1, `rgba(255,245,185,${intensity * 0.78})`);
-  ctx.fillStyle = g3; ctx.fill();
+    const w3 = width * 0.26, h3 = height * 0.36;
+    const w3b = noise(cx * 0.08 + t * 0.4, baseY * 0.08 + 20) * w3 * 0.3;
+    ctx.beginPath();
+    ctx.moveTo(cx - w3 * 0.32 + w3b, baseY);
+    ctx.bezierCurveTo(cx - w3 * 0.42 + w3b, baseY - h3 * 0.55, cx + w3b * 0.5, baseY - h3, cx + w3b * 0.1, baseY - h3);
+    ctx.bezierCurveTo(cx + w3b * 0.5, baseY - h3, cx + w3 * 0.42 + w3b, baseY - h3 * 0.55, cx + w3 * 0.32 + w3b, baseY);
+    ctx.closePath();
+    const g3 = ctx.createLinearGradient(cx, baseY - h3, cx, baseY);
+    g3.addColorStop(0, `rgba(255,255,230,0)`);
+    g3.addColorStop(0.4, `rgba(255,252,210,${intensity * 0.55})`);
+    g3.addColorStop(1, `rgba(255,245,185,${intensity * 0.78})`);
+    ctx.fillStyle = g3; ctx.fill();
 }
 
 function BurnCanvas({ active, idle, reverse, onDone }: {
-  active: boolean;
-  idle: boolean;
-  reverse: boolean;
-  onDone: () => void;
+    active: boolean;
+    idle: boolean;
+    reverse: boolean;
+    onDone: () => void;
 }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef    = useRef<number | null>(null);
-  const doneRef   = useRef(false);
-  const lingerPoolRef = useRef<ParticlePool | null>(null);
-  const lingerRafRef  = useRef<number | null>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const rafRef = useRef<number | null>(null);
+    const doneRef = useRef(false);
+    const lingerPoolRef = useRef<ParticlePool | null>(null);
+    const lingerRafRef = useRef<number | null>(null);
 
-  // IDLE: paint opaque black to hide the photo during card flip
-  useEffect(() => {
-    if (active || !idle) return;
-    if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const DPR = Math.min(window.devicePixelRatio || 1, 2);
-    const W = canvas.offsetWidth  || 300;
-    const H = canvas.offsetHeight || 480;
-    canvas.width  = W * DPR;
-    canvas.height = H * DPR;
-    const ctx = canvas.getContext('2d')!;
-    ctx.scale(DPR, DPR);
-    ctx.fillStyle = 'rgb(6, 4, 2)';
-    ctx.fillRect(0, 0, W, H);
-  }, [idle, active]);
+    // IDLE: paint opaque black to hide the photo during card flip
+    useEffect(() => {
+        if (active || !idle) return;
+        if (rafRef.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const DPR = Math.min(window.devicePixelRatio || 1, 2);
+        const W = canvas.offsetWidth || 300;
+        const H = canvas.offsetHeight || 480;
+        canvas.width = W * DPR;
+        canvas.height = H * DPR;
+        const ctx = canvas.getContext('2d')!;
+        ctx.scale(DPR, DPR);
+        ctx.fillStyle = 'rgb(6, 4, 2)';
+        ctx.fillRect(0, 0, W, H);
+    }, [idle, active]);
 
-  // ACTIVE: run burn animation
-  useEffect(() => {
-    if (!active) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const DPR = Math.min(window.devicePixelRatio || 1, 2);
-    const W = canvas.offsetWidth  || 300;
-    const H = canvas.offsetHeight || 480;
-    canvas.width  = W * DPR;
-    canvas.height = H * DPR;
-    const ctx = canvas.getContext('2d')!;
-    ctx.scale(DPR, DPR);
-    // Start opaque
-    ctx.fillStyle = 'rgb(6, 4, 2)';
-    ctx.fillRect(0, 0, W, H);
+    // ACTIVE: run burn animation
+    useEffect(() => {
+        if (!active) return;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const DPR = Math.min(window.devicePixelRatio || 1, 2);
+        const W = canvas.offsetWidth || 300;
+        const H = canvas.offsetHeight || 480;
+        canvas.width = W * DPR;
+        canvas.height = H * DPR;
+        const ctx = canvas.getContext('2d')!;
+        ctx.scale(DPR, DPR);
+        // Start opaque
+        ctx.fillStyle = 'rgb(6, 4, 2)';
+        ctx.fillRect(0, 0, W, H);
 
-    doneRef.current = false;
-    const noise = makeNoise();
-    const pool  = makePool();
-    const COLS  = 80;
-    const colW  = W / COLS;
-    const delays   = new Float32Array(COLS);
-    const flameVar = new Float32Array(COLS);
-    for (let c = 0; c < COLS; c++) {
-      delays[c]   = Math.random() * 180;
-      flameVar[c] = 0.75 + Math.random() * 0.5;
-    }
-    const TOTAL_MS = 2600;
-    const REV_MS   = 2200;
-    let startTime: number | null = null;
-    let frameT = 0;
-
-    function tick(now: number) {
-      if (!startTime) startTime = now;
-      const elapsed = now - startTime;
-      frameT += 0.016;
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = 'rgba(6, 4, 2, 1)';
-      ctx.fillRect(0, 0, W, H);
-      let allDone = true;
-      for (let c = 0; c < COLS; c++) {
-        const x  = c * colW;
-        const cx = x + colW / 2;
-        let colT: number;
-        if (reverse) {
-          colT = Math.max(0, Math.min(1, (elapsed - delays[COLS - 1 - c] * 0.4) / (REV_MS * 0.72)));
-        } else {
-          colT = Math.max(0, Math.min(1, (elapsed - delays[c] * 0.4) / (TOTAL_MS * 0.68)));
+        doneRef.current = false;
+        const noise = makeNoise();
+        const pool = makePool();
+        const COLS = 80;
+        const colW = W / COLS;
+        const delays = new Float32Array(COLS);
+        const flameVar = new Float32Array(COLS);
+        for (let c = 0; c < COLS; c++) {
+            delays[c] = Math.random() * 180;
+            flameVar[c] = 0.75 + Math.random() * 0.5;
         }
-        if (colT < 1) allDone = false;
-        if (!reverse) {
-          const clearedBottom = H * colT;
-          if (clearedBottom > 0) {
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.fillStyle = 'rgba(0,0,0,1)';
-            ctx.fillRect(x, 0, colW + 0.5, clearedBottom);
-          }
-        } else {
-          const charBottom = H * colT;
-          if (charBottom < H) {
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.fillStyle = 'rgba(0,0,0,1)';
-            ctx.fillRect(x, charBottom, colW + 0.5, H - charBottom);
-          }
-        }
-      }
-      ctx.globalCompositeOperation = 'source-over';
-      for (let c = 0; c < COLS; c++) {
-        const x  = c * colW;
-        const cx = x + colW / 2;
-        let colT: number;
-        if (reverse) {
-          colT = Math.max(0, Math.min(1, (elapsed - delays[COLS - 1 - c] * 0.4) / (REV_MS * 0.72)));
-        } else {
-          colT = Math.max(0, Math.min(1, (elapsed - delays[c] * 0.4) / (TOTAL_MS * 0.68)));
-        }
-        if (!reverse) {
-          const frontierY = H * colT;
-          if (colT > 0.01 && colT < 0.985) {
-            const eI = colT < 0.12 ? colT / 0.12 : colT > 0.9 ? (1 - colT) / 0.1 : 1;
-            const fH = (20 + noise(c * 0.13 + frameT * 0.22, frameT * 0.38) * 12) * flameVar[c];
-            const rg = ctx.createRadialGradient(cx, frontierY, 0, cx, frontierY, colW * 4.5);
-            rg.addColorStop(0,   `rgba(230,150,20,${eI * 0.22})`);
-            rg.addColorStop(0.4, `rgba(180,90,10,${eI * 0.09})`);
-            rg.addColorStop(1,   `rgba(0,0,0,0)`);
-            ctx.fillStyle = rg;
-            ctx.fillRect(cx - colW * 4.5, frontierY - colW * 4.5, colW * 9, colW * 9);
-            drawFlameTongue(ctx, cx, frontierY, colW * 2.8, fH, eI, noise, frameT);
-            if (Math.random() < 0.32) spawnParticle(pool, cx, frontierY, eI);
-          }
-          if (colT > 0.05 && colT < 0.97) {
-            const eH = Math.min(20, H - H * colT);
-            const eg = ctx.createLinearGradient(x, H * colT, x, H * colT + eH);
-            eg.addColorStop(0,   `rgba(140,50,4,0.3)`);
-            eg.addColorStop(0.5, `rgba(180,80,8,0.15)`);
-            eg.addColorStop(1,   `rgba(0,0,0,0)`);
-            ctx.fillStyle = eg;
-            ctx.fillRect(x, H * colT, colW + 0.5, eH);
-          }
-        } else {
-          const charBottom = H * colT;
-          if (colT > 0.02 && colT < 0.97) {
-            const intensity = Math.sin(colT * Math.PI * 0.85) * 0.8 + 0.2;
-            const fH = (16 + noise(c * 0.14, frameT * 0.45) * 9) * flameVar[c];
-            const rg = ctx.createRadialGradient(cx, charBottom, 0, cx, charBottom, colW * 4.5);
-            rg.addColorStop(0,   `rgba(230,150,20,${intensity * 0.20})`);
-            rg.addColorStop(0.4, `rgba(180,90,10,${intensity * 0.08})`);
-            rg.addColorStop(1,   `rgba(0,0,0,0)`);
-            ctx.fillStyle = rg;
-            ctx.fillRect(cx - colW * 4.5, charBottom - colW * 4.5, colW * 9, colW * 9);
-            drawFlameTongue(ctx, cx, charBottom, colW * 2.8, fH, intensity, noise, frameT);
-            if (Math.random() < 0.15) spawnParticle(pool, cx, charBottom, intensity);
-          }
-        }
-      }
-      tickParticles(pool);
-      drawParticles(ctx, pool);
-      if (allDone && !doneRef.current) {
-        doneRef.current = true;
+        const TOTAL_MS = 2600;
+        const REV_MS = 2200;
+        let startTime: number | null = null;
+        let frameT = 0;
 
-        // Transfer surviving burn particles into the linger pool
-        const lp = makePool();
-        for (let i = 0; i < pool.count && lp.count < MAX_P; i++) {
-            const idx = lp.count++;
-            lp.x[idx]       = pool.x[i];
-            lp.y[idx]       = pool.y[i];
-            lp.vx[idx]      = pool.vx[i];
-            lp.vy[idx]      = pool.vy[i];
-            lp.life[idx]    = pool.life[i];
-            lp.maxLife[idx] = pool.maxLife[i];  // keep original lifetime
-            lp.size[idx]    = pool.size[i];
-            lp.type[idx]    = pool.type[i];
-        }
-
-        // Optionally add a few extra long-lived embers to supplement
-        const EXTRA = 18;
-        for (let n = 0; n < EXTRA && lp.count < MAX_P; n++) {
-            const idx = lp.count++;
-            lp.x[idx]       = W * 0.1 + Math.random() * W * 0.8;
-            lp.y[idx]       = H * 0.3 + Math.random() * H * 0.65;
-            lp.vx[idx]      = (Math.random() - 0.5) * 0.5;
-            lp.vy[idx]      = -(0.04 + Math.random() * 0.18);
-            lp.life[idx]    = 1;
-            lp.maxLife[idx] = 1800 + Math.random() * 1800;  // long-lived only
-            lp.size[idx]    = 0.4 + Math.random() * 1.4;
-            lp.type[idx]    = Math.random() < 0.3 ? 1 : 0;
-        }
-
-        lingerPoolRef.current = lp;
-
-        const canvas = canvasRef.current!;
-        const ctx2   = canvas.getContext('2d')!;
-        function lingerTick() {
-            const pool = lingerPoolRef.current;
-            if (!pool || pool.count === 0) {
-            lingerPoolRef.current = null;
-            onDone();
-            return;
+        function tick(now: number) {
+            if (!startTime) startTime = now;
+            const elapsed = now - startTime;
+            frameT += 0.016;
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = 'rgba(6, 4, 2, 1)';
+            ctx.fillRect(0, 0, W, H);
+            let allDone = true;
+            for (let c = 0; c < COLS; c++) {
+                const x = c * colW;
+                const cx = x + colW / 2;
+                let colT: number;
+                if (reverse) {
+                    colT = Math.max(0, Math.min(1, (elapsed - delays[COLS - 1 - c] * 0.4) / (REV_MS * 0.72)));
+                } else {
+                    colT = Math.max(0, Math.min(1, (elapsed - delays[c] * 0.4) / (TOTAL_MS * 0.68)));
+                }
+                if (colT < 1) allDone = false;
+                if (!reverse) {
+                    const clearedBottom = H * colT;
+                    if (clearedBottom > 0) {
+                        ctx.globalCompositeOperation = 'destination-out';
+                        ctx.fillStyle = 'rgba(0,0,0,1)';
+                        ctx.fillRect(x, 0, colW + 0.5, clearedBottom);
+                    }
+                } else {
+                    const charBottom = H * colT;
+                    if (charBottom < H) {
+                        ctx.globalCompositeOperation = 'destination-out';
+                        ctx.fillStyle = 'rgba(0,0,0,1)';
+                        ctx.fillRect(x, charBottom, colW + 0.5, H - charBottom);
+                    }
+                }
             }
-            ctx2.clearRect(0, 0, W, H);
-
-            for (let i = 0; i < pool.count; i++) {
-            if (pool.vy[i] > -0.12) {
-                pool.vx[i] += Math.sin(performance.now() * 0.0008 + i * 1.7) * 0.008;
-                pool.vy[i] = -(0.03 + Math.random() * 0.04);
+            ctx.globalCompositeOperation = 'source-over';
+            for (let c = 0; c < COLS; c++) {
+                const x = c * colW;
+                const cx = x + colW / 2;
+                let colT: number;
+                if (reverse) {
+                    colT = Math.max(0, Math.min(1, (elapsed - delays[COLS - 1 - c] * 0.4) / (REV_MS * 0.72)));
+                } else {
+                    colT = Math.max(0, Math.min(1, (elapsed - delays[c] * 0.4) / (TOTAL_MS * 0.68)));
+                }
+                if (!reverse) {
+                    const frontierY = H * colT;
+                    if (colT > 0.01 && colT < 0.985) {
+                        const eI = colT < 0.12 ? colT / 0.12 : colT > 0.9 ? (1 - colT) / 0.1 : 1;
+                        const fH = (20 + noise(c * 0.13 + frameT * 0.22, frameT * 0.38) * 12) * flameVar[c];
+                        const rg = ctx.createRadialGradient(cx, frontierY, 0, cx, frontierY, colW * 4.5);
+                        rg.addColorStop(0, `rgba(230,150,20,${eI * 0.22})`);
+                        rg.addColorStop(0.4, `rgba(180,90,10,${eI * 0.09})`);
+                        rg.addColorStop(1, `rgba(0,0,0,0)`);
+                        ctx.fillStyle = rg;
+                        ctx.fillRect(cx - colW * 4.5, frontierY - colW * 4.5, colW * 9, colW * 9);
+                        drawFlameTongue(ctx, cx, frontierY, colW * 2.8, fH, eI, noise, frameT);
+                        if (Math.random() < 0.32) spawnParticle(pool, cx, frontierY, eI);
+                    }
+                    if (colT > 0.05 && colT < 0.97) {
+                        const eH = Math.min(20, H - H * colT);
+                        const eg = ctx.createLinearGradient(x, H * colT, x, H * colT + eH);
+                        eg.addColorStop(0, `rgba(140,50,4,0.3)`);
+                        eg.addColorStop(0.5, `rgba(180,80,8,0.15)`);
+                        eg.addColorStop(1, `rgba(0,0,0,0)`);
+                        ctx.fillStyle = eg;
+                        ctx.fillRect(x, H * colT, colW + 0.5, eH);
+                    }
+                } else {
+                    const charBottom = H * colT;
+                    if (colT > 0.02 && colT < 0.97) {
+                        const intensity = Math.sin(colT * Math.PI * 0.85) * 0.8 + 0.2;
+                        const fH = (16 + noise(c * 0.14, frameT * 0.45) * 9) * flameVar[c];
+                        const rg = ctx.createRadialGradient(cx, charBottom, 0, cx, charBottom, colW * 4.5);
+                        rg.addColorStop(0, `rgba(230,150,20,${intensity * 0.20})`);
+                        rg.addColorStop(0.4, `rgba(180,90,10,${intensity * 0.08})`);
+                        rg.addColorStop(1, `rgba(0,0,0,0)`);
+                        ctx.fillStyle = rg;
+                        ctx.fillRect(cx - colW * 4.5, charBottom - colW * 4.5, colW * 9, colW * 9);
+                        drawFlameTongue(ctx, cx, charBottom, colW * 2.8, fH, intensity, noise, frameT);
+                        if (Math.random() < 0.15) spawnParticle(pool, cx, charBottom, intensity);
+                    }
+                }
             }
-            }
-
             tickParticles(pool);
-            drawParticles(ctx2, pool);
-            lingerRafRef.current = requestAnimationFrame(lingerTick);
+            drawParticles(ctx, pool);
+            if (allDone && !doneRef.current) {
+                doneRef.current = true;
+
+                // Transfer surviving burn particles into the linger pool
+                const lp = makePool();
+                for (let i = 0; i < pool.count && lp.count < MAX_P; i++) {
+                    const idx = lp.count++;
+                    lp.x[idx] = pool.x[i];
+                    lp.y[idx] = pool.y[i];
+                    lp.vx[idx] = pool.vx[i];
+                    lp.vy[idx] = pool.vy[i];
+                    lp.life[idx] = pool.life[i];
+                    lp.maxLife[idx] = pool.maxLife[i];  // keep original lifetime
+                    lp.size[idx] = pool.size[i];
+                    lp.type[idx] = pool.type[i];
+                }
+
+                // Optionally add a few extra long-lived embers to supplement
+                const EXTRA = 18;
+                for (let n = 0; n < EXTRA && lp.count < MAX_P; n++) {
+                    const idx = lp.count++;
+                    lp.x[idx] = W * 0.1 + Math.random() * W * 0.8;
+                    lp.y[idx] = H * 0.3 + Math.random() * H * 0.65;
+                    lp.vx[idx] = (Math.random() - 0.5) * 0.5;
+                    lp.vy[idx] = -(0.04 + Math.random() * 0.18);
+                    lp.life[idx] = 1;
+                    lp.maxLife[idx] = 1800 + Math.random() * 1800;  // long-lived only
+                    lp.size[idx] = 0.4 + Math.random() * 1.4;
+                    lp.type[idx] = Math.random() < 0.3 ? 1 : 0;
+                }
+
+                lingerPoolRef.current = lp;
+
+                const canvas = canvasRef.current!;
+                const ctx2 = canvas.getContext('2d')!;
+                function lingerTick() {
+                    const pool = lingerPoolRef.current;
+                    if (!pool || pool.count === 0) {
+                        lingerPoolRef.current = null;
+                        onDone();
+                        return;
+                    }
+                    ctx2.clearRect(0, 0, W, H);
+
+                    for (let i = 0; i < pool.count; i++) {
+                        if (pool.vy[i] > -0.12) {
+                            pool.vx[i] += Math.sin(performance.now() * 0.0008 + i * 1.7) * 0.008;
+                            pool.vy[i] = -(0.03 + Math.random() * 0.04);
+                        }
+                    }
+
+                    tickParticles(pool);
+                    drawParticles(ctx2, pool);
+                    lingerRafRef.current = requestAnimationFrame(lingerTick);
+                }
+                lingerRafRef.current = requestAnimationFrame(lingerTick);
+                return;
+
+            }
+            rafRef.current = requestAnimationFrame(tick);
         }
-        lingerRafRef.current = requestAnimationFrame(lingerTick);
-        return;
+        rafRef.current = requestAnimationFrame(tick);
+        return () => {
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            if (lingerRafRef.current) cancelAnimationFrame(lingerRafRef.current);
+            lingerPoolRef.current = null;
+        };
+    }, [active, reverse, onDone]);
 
-      }
-      rafRef.current = requestAnimationFrame(tick);
-    }
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current)   cancelAnimationFrame(rafRef.current);
-      if (lingerRafRef.current) cancelAnimationFrame(lingerRafRef.current);
-      lingerPoolRef.current = null;
-    };
-  }, [active, reverse, onDone]);
-
-  if (!idle && !active && !lingerPoolRef.current) return null;
-  return <canvas ref={canvasRef} className="cp-burn-canvas" />;
+    if (!idle && !active && !lingerPoolRef.current) return null;
+    return <canvas ref={canvasRef} className="cp-burn-canvas" />;
 }
 
 /* ── ORBIT CARD ──────────────────────────────────────────── */
@@ -494,7 +494,7 @@ function OrbitCard({
     stat: typeof EXPANDED_STATS[0];
     visible: boolean;
     index: number;
-    pos: { x:number; y:number };
+    pos: { x: number; y: number };
     onSelect: (stat: typeof EXPANDED_STATS[0]) => void;
 }) {
     return (
@@ -502,7 +502,7 @@ function OrbitCard({
             className={`orbit-card${visible ? ' orbit-card--visible' : ''}`}
             style={{
                 left: `${pos.x}px`,
-                top:  `${pos.y}px`,
+                top: `${pos.y}px`,
                 transitionDelay: visible ? `${index * 0.08}s` : '0s',
             }}
             onClick={() => visible && onSelect(stat)}
@@ -525,9 +525,9 @@ function ExpandedPanel({
     activeIndex: number;
     onClose: () => void;
 }) {
-    const [current,       setCurrent]       = useState(activeIndex);
-    const [animating,     setAnimating]     = useState(false);
-    const [userInteracted,setUserInteracted]= useState(false);
+    const [current, setCurrent] = useState(activeIndex);
+    const [animating, setAnimating] = useState(false);
+    const [userInteracted, setUserInteracted] = useState(false);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     useEffect(() => {
@@ -587,7 +587,6 @@ function ExpandedPanel({
                 <span className="ep-nav__count">{current + 1} / {stats.length}</span>
                 <button className="ep-nav__btn" onClick={() => goTo((current + 1) % stats.length)}>→</button>
             </div>
-            <img src="/gold-liquid.png" alt="" className="lp-hero-gold-decor" />
         </div>
     );
 }
@@ -596,16 +595,16 @@ function ExpandedPanel({
 function EnergyLines() {
     return (
         <svg className="cp-energy-svg" viewBox="0 0 400 640" preserveAspectRatio="none" aria-hidden>
-            <line x1="60"  y1="0"   x2="340" y2="0"   className="cp-energy-line cp-energy-line--h cp-el--top" />
-            <line x1="60"  y1="640" x2="340" y2="640" className="cp-energy-line cp-energy-line--h cp-el--bot" />
-            <line x1="0"   y1="60"  x2="0"   y2="580" className="cp-energy-line cp-energy-line--v cp-el--left" />
-            <line x1="400" y1="60"  x2="400" y2="580" className="cp-energy-line cp-energy-line--v cp-el--right" />
-            <polyline points="0,60 40,20 60,0"         className="cp-energy-notch" />
-            <polyline points="400,60 360,20 340,0"     className="cp-energy-notch" />
-            <polyline points="0,580 40,620 60,640"     className="cp-energy-notch" />
+            <line x1="60" y1="0" x2="340" y2="0" className="cp-energy-line cp-energy-line--h cp-el--top" />
+            <line x1="60" y1="640" x2="340" y2="640" className="cp-energy-line cp-energy-line--h cp-el--bot" />
+            <line x1="0" y1="60" x2="0" y2="580" className="cp-energy-line cp-energy-line--v cp-el--left" />
+            <line x1="400" y1="60" x2="400" y2="580" className="cp-energy-line cp-energy-line--v cp-el--right" />
+            <polyline points="0,60 40,20 60,0" className="cp-energy-notch" />
+            <polyline points="400,60 360,20 340,0" className="cp-energy-notch" />
+            <polyline points="0,580 40,620 60,640" className="cp-energy-notch" />
             <polyline points="400,580 360,620 340,640" className="cp-energy-notch" />
-            <line x1="0"   y1="200" x2="18"  y2="200" className="cp-energy-tick" />
-            <line x1="0"   y1="440" x2="18"  y2="440" className="cp-energy-tick" />
+            <line x1="0" y1="200" x2="18" y2="200" className="cp-energy-tick" />
+            <line x1="0" y1="440" x2="18" y2="440" className="cp-energy-tick" />
             <line x1="400" y1="200" x2="382" y2="200" className="cp-energy-tick" />
             <line x1="400" y1="440" x2="382" y2="440" className="cp-energy-tick" />
         </svg>
@@ -662,24 +661,24 @@ export function CinematicPortrait({
     const sceneRef = useRef<HTMLDivElement>(null);
 
     // At the top of CinematicPortrait component, add:
-    const [particles] = useState<Array<{x: string; y: string}>>(() =>
+    const [particles] = useState<Array<{ x: string; y: string }>>(() =>
         Array.from({ length: 12 }, () => ({
             x: `${10 + Math.random() * 80}%`,
             y: `${10 + Math.random() * 80}%`,
         }))
     );
 
-    const [stage,          setStage]          = useState<Stage>(0);
-    const [isHovered,      setIsHovered]      = useState(false);
-    const [orbitPositions, setOrbitPositions] = useState<Array<{x:number;y:number}>>([]);
-    const [activeStatIdx,  setActiveStatIdx]  = useState(0);
-    const [burning,        setBurning]        = useState(false);
-    const [burnReverse,    setBurnReverse]    = useState(false);
-    const [flipping,       setFlipping]       = useState(false);
-    const [showFront,      setShowFront]      = useState(false);
+    const [stage, setStage] = useState<Stage>(0);
+    const [isHovered, setIsHovered] = useState(false);
+    const [orbitPositions, setOrbitPositions] = useState<Array<{ x: number; y: number }>>([]);
+    const [activeStatIdx, setActiveStatIdx] = useState(0);
+    const [burning, setBurning] = useState(false);
+    const [burnReverse, setBurnReverse] = useState(false);
+    const [flipping, setFlipping] = useState(false);
+    const [showFront, setShowFront] = useState(false);
 
-    const hoverTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const idleTimer   = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => { onLocked?.(); }, [onLocked]);
 
@@ -806,8 +805,8 @@ export function CinematicPortrait({
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (!sceneRef.current || stage === 0 || stage === 3) return;
         const r = sceneRef.current.getBoundingClientRect();
-        const x = ((e.clientX - r.left)  / r.width  - 0.5) * 8;
-        const y = ((e.clientY - r.top)   / r.height - 0.5) * 6;
+        const x = ((e.clientX - r.left) / r.width - 0.5) * 8;
+        const y = ((e.clientY - r.top) / r.height - 0.5) * 6;
         sceneRef.current.style.setProperty('--tilt-x', `${y}deg`);
         sceneRef.current.style.setProperty('--tilt-y', `${x}deg`);
     }, [stage]);
@@ -821,17 +820,17 @@ export function CinematicPortrait({
                 className={[
                     'cp-scene',
                     isHovered && stage >= 1 ? 'cp-scene--hovered' : '',
-                    stage === 2             ? 'cp-scene--orbit'   : '',
-                    isExpanded              ? 'cp-scene--flipped' : '',
-                    stage === 0             ? 'cp-scene--card-back' : '',
+                    stage === 2 ? 'cp-scene--orbit' : '',
+                    isExpanded ? 'cp-scene--flipped' : '',
+                    stage === 0 ? 'cp-scene--card-back' : '',
                 ].join(' ')}
                 onMouseMove={handleMouseMove}
                 onMouseEnter={stage >= 1 ? handleFrontMouseEnter : undefined}
                 onMouseLeave={stage >= 1 ? handleFrontMouseLeave : undefined}
                 onClick={
                     stage === 0 ? handleCardBackClick :
-                    stage === 1 ? handleFrontClick    :
-                    stage === 2 ? handleStage2PortraitClick : undefined
+                        stage === 1 ? handleFrontClick :
+                            stage === 2 ? handleStage2PortraitClick : undefined
                 }
                 style={{ '--tilt-x': '0deg', '--tilt-y': '0deg' } as React.CSSProperties}
             >
